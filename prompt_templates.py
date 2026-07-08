@@ -1,0 +1,83 @@
+"""Utilities for loading and rendering AI prompt templates.
+
+Adapted from the sibling ``astro`` project: prompt files live under
+``prompts/`` and may carry lightweight ``---`` frontmatter (e.g. temperature).
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
+from typing import TypeAlias
+
+PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+PromptMetadataValue: TypeAlias = bool | int | float | str
+
+
+@dataclass(frozen=True)
+class PromptTemplate:
+    """Structured prompt template with lightweight frontmatter metadata."""
+
+    metadata: dict[str, PromptMetadataValue]
+    content: str
+
+    def render(self, **context: object) -> str:
+        return self.content.format(**context)
+
+
+def _coerce_metadata_value(value: str) -> PromptMetadataValue:
+    if value.lower() in {"true", "false"}:
+        return value.lower() == "true"
+
+    try:
+        return int(value)
+    except ValueError:
+        pass
+
+    try:
+        return float(value)
+    except ValueError:
+        pass
+
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        return value[1:-1]
+
+    return value
+
+
+def _parse_prompt_file(raw_text: str) -> PromptTemplate:
+    if not raw_text.startswith("---\n"):
+        return PromptTemplate(metadata={}, content=raw_text.strip())
+
+    lines = raw_text.splitlines()
+    metadata: dict[str, PromptMetadataValue] = {}
+
+    for index in range(1, len(lines)):
+        line = lines[index]
+        if line == "---":
+            body = "\n".join(lines[index + 1:]).strip()
+            return PromptTemplate(metadata=metadata, content=body)
+
+        if not line.strip():
+            continue
+
+        key, separator, value = line.partition(":")
+        if not separator:
+            raise ValueError(f"Invalid prompt frontmatter line: {line}")
+
+        metadata[key.strip()] = _coerce_metadata_value(value.strip())
+
+    raise ValueError("Prompt frontmatter is missing a closing '---' delimiter")
+
+
+@lru_cache(maxsize=None)
+def load_prompt_template(relative_path: str) -> PromptTemplate:
+    """Load a prompt template from the prompts directory."""
+    template_path = PROMPTS_DIR / relative_path
+    raw_text = template_path.read_text(encoding="utf-8")
+    return _parse_prompt_file(raw_text)
+
+
+def load_prompt_text(relative_path: str) -> str:
+    """Load only the prompt body text."""
+    return load_prompt_template(relative_path).content

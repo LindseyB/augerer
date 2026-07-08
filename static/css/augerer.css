@@ -1,0 +1,497 @@
+/* Tarot-specific layer atop the shared Astro stylesheet */
+
+:root {
+  --card-view-border: color-mix(in srgb, var(--accent) 35%, #3d4e78 65%);
+}
+
+html.dark {
+  --card-view-border: color-mix(in srgb, var(--accent) 78%, #d7f8ff 22%);
+}
+
+.tarot-bento {
+  margin-bottom: 1.25rem;
+  align-items: start;
+}
+
+/* Lay the home tiles out as a tidy 2 x 2 grid on wider screens. */
+@media (min-width: 768px) {
+  .tarot-bento {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  /* Keep the two reading tiles stacked tightly in the left column by
+     letting the lookup tile occupy the whole right column. */
+  .tarot-bento .tarot-lookup {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+/* Let the lookup results float out of the tile as an overlay. */
+.tarot-lookup {
+  overflow: visible;
+  z-index: 20;
+}
+
+.tarot-lookup .tarot-controls {
+  position: relative;
+}
+
+.tarot-controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.tarot-controls label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.tarot-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+  color: var(--foreground);
+  padding: 0.7rem 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.tarot-input:focus,
+.lookup-btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.lookup-results {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--card) 96%, #0b1020 4%);
+  box-shadow: 0 22px 48px -20px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(14px);
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent;
+}
+
+.lookup-results:empty {
+  display: none;
+}
+
+.lookup-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lookup-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lookup-results::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 999px;
+}
+
+.lookup-results::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.lookup-btn {
+  width: 100%;
+  text-align: left;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+  color: var(--foreground);
+  padding: 0.62rem 0.72rem;
+  font-family: var(--font-sans);
+}
+
+.lookup-btn.active,
+.lookup-btn:hover {
+  border-color: color-mix(in srgb, var(--primary) 72%, transparent);
+}
+
+.tarot-output {
+  min-height: 340px;
+}
+
+.meaning-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.meaning-grid h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.meaning-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.meaning-list li {
+  margin-bottom: 0.35rem;
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+}
+
+.error-text {
+  margin-top: 0.85rem;
+  color: #fda4af;
+}
+
+.detail-meta {
+  margin-top: 0.8rem;
+  margin-bottom: 0;
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+}
+
+.tarot-reading-page {
+  padding-bottom: 2rem;
+}
+
+.tarot-reading-main {
+  width: min(1080px, 94vw);
+}
+
+.tarot-feature-head {
+  margin-top: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.tarot-detail-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.tarot-art-column,
+.tarot-copy-column {
+  min-width: 0;
+}
+
+.tarot-image-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-image {
+  width: min(100%, 460px);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 2px solid var(--card-view-border);
+  align-self: flex-start;
+  transition: transform 280ms ease;
+}
+
+.card-image-reversed {
+  transform: rotate(180deg);
+}
+
+.detail-signs {
+  margin-top: 1rem;
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+}
+
+.detail-signs-label {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.detail-signs-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.detail-sign-pill {
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 999px;
+  padding: 0.28rem 0.62rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+  font-size: 0.84rem;
+}
+
+.detail-sign-symbol {
+  color: var(--primary);
+}
+
+@media (min-width: 900px) {
+  .tarot-detail-shell {
+    grid-template-columns: minmax(320px, 420px) 1fr;
+    align-items: start;
+    padding: 1.25rem;
+  }
+
+  .card-image {
+    position: sticky;
+    top: 92px;
+  }
+
+  .meaning-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Debug: card / SVG match check */
+.debug-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.debug-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+}
+
+.debug-thumb {
+  display: block;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  border: 2px solid var(--card-view-border);
+  aspect-ratio: 3 / 5;
+  background: #f4f1ea;
+}
+
+.debug-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.debug-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.debug-name {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.debug-sub {
+  margin: 0;
+  font-size: 0.82rem;
+  color: color-mix(in srgb, var(--foreground) 75%, transparent);
+}
+
+.debug-slug {
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.debug-slug code {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.debug-tag {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+  padding: 0.16rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.debug-tag--imported {
+  background: color-mix(in srgb, #4ade80 22%, transparent);
+  color: color-mix(in srgb, #16a34a 80%, var(--foreground));
+}
+
+.debug-tag--generated {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+}
+
+.debug-source {
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+
+/* Reading pages: one-card and three-card spreads */
+.tarot-reading-tile {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.tarot-reading-cta {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+}
+
+.reading-spread {
+  margin: 0.5rem 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.reading-spread--three {
+  gap: 1.25rem;
+}
+
+.reading-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 260px;
+}
+
+.reading-spread--three .reading-card {
+  flex: 1 1 200px;
+  max-width: 240px;
+}
+
+.reading-card-position {
+  order: -1;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.reading-card-link {
+  display: block;
+  line-height: 0;
+}
+
+.reading-card .card-image {
+  width: 100%;
+  align-self: stretch;
+}
+
+.reading-card-name {
+  font-size: 0.95rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.reading-card-orientation {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--foreground) 65%, transparent);
+}
+
+.reading-analysis-panel {
+  margin-top: 0.5rem;
+}
+
+.msg-ai-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.reading-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms, background 150ms;
+}
+
+.reading-copy-btn:hover {
+  border-color: color-mix(in srgb, var(--primary) 72%, transparent);
+}
+
+.reading-copy-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.reading-copy-btn.is-copied {
+  border-color: color-mix(in srgb, var(--primary) 72%, transparent);
+  color: var(--accent);
+}
+
+.reading-copy-btn__icon {
+  flex-shrink: 0;
+}
+
+.reading-nav {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.reading-nav .nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.reading-nav .nav-link:hover {
+  text-decoration: underline;
+}
+

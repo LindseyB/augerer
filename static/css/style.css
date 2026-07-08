@@ -1,0 +1,48 @@
+/* ============================================================
+   STYLE.CSS — animations only
+   All other styles live in cosmic.css
+   ============================================================ */
+
+/* ---- Spinner (loading buttons) ---- */
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ---- Typing cursor blink ---- */
+.typing-cursor {
+    animation: blink 1s infinite;
+    color: var(--foreground);
+}
+
+@keyframes blink {
+    0%, 50%   { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ---- Collapsible section transition ---- */
+.section-content {
+    max-height: none;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
+    opacity: 1;
+    padding: 20px;
+}
+
+.section-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+}

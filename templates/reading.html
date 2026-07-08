@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% set spread_title = "Three-card spread" if spread == "three" else "One-card draw" %}
+{% block title %}{{ spread_title }} | Augerer Tarot{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{{ url_for('static', filename='js/reading-stream.js') }}"></script>
+<script>
+  window.readingData = {
+    spread: {{ spread | tojson }},
+    cards: [
+      {% for entry in cards %}
+      {
+        slug: {{ entry.card.slug | tojson }},
+        orientation: {{ entry.orientation | tojson }},
+        position: {{ (entry.position or "") | tojson }}
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  };
+</script>
+{% endblock %}
+
+{% block content %}
+{% if streaming %}
+<script>document.body.dataset.streaming = 'true';</script>
+{% endif %}
+
+<header class="site-header" id="siteHeader">
+  <a href="/" class="logo">
+    <span class="logo-mark">✦</span>
+    <span class="logo-text">augerer<span class="logo-dim">.tarot</span></span>
+  </a>
+  <div class="header-actions">
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+      <svg class="icon-sun" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="reading-page tarot-reading-page">
+  <main class="reading-main tarot-reading-main" id="main-content" tabindex="-1">
+    <a href="/" class="back-link">
+      <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to main
+    </a>
+
+    <header class="feature-head tarot-feature-head">
+      <p class="eyebrow">{% if spread == "three" %}past · present · future{% else %}your daily draw{% endif %}</p>
+      <h1 class="reading-heading">Your <span class="text-holo">reading.</span></h1>
+      <p class="subtitle">
+        {% if spread == "three" %}
+        Three cards drawn for where you have been, where you are, and where you are headed.
+        {% else %}
+        One card drawn and read for the energy around you right now.
+        {% endif %}
+      </p>
+    </header>
+
+    <section class="reading-spread reading-spread--{{ spread }}" aria-label="Cards drawn">
+      {% for entry in cards %}
+      <figure class="reading-card">
+        {% if entry.position %}
+        <figcaption class="reading-card-position">{{ entry.position }}</figcaption>
+        {% endif %}
+        <a class="reading-card-link" href="{{ url_for('card_detail', slug=entry.card.slug, orientation=entry.orientation) }}">
+          <img
+            class="card-image{% if entry.orientation == 'reversed' %} card-image-reversed{% endif %}"
+            data-card-image="true"
+            data-base-src="{{ url_for('card_image_svg', slug=entry.card.slug, orientation=entry.orientation) }}"
+            src="{{ url_for('card_image_svg', slug=entry.card.slug, orientation=entry.orientation) }}"
+            alt="{{ entry.card.name }} tarot card illustration"
+          />
+        </a>
+        <figcaption class="reading-card-name">
+          {{ entry.card.name }}
+          <span class="reading-card-orientation">{{ entry.orientation }}</span>
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </section>
+
+    <section class="chrome-border glass chat-panel reading-analysis-panel">
+      <div class="chat-scroll">
+        <div class="msg-ai">
+          <div class="msg-ai-head">
+            <p class="tag">
+              <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.5 20 12 16.6 7.5 20 9 13.6 4 10l6.1-1.2z"/></svg>
+              the reader
+            </p>
+            <button type="button" class="reading-copy-btn" id="copyReadingBtn" hidden>
+              <svg class="reading-copy-btn__icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="reading-copy-btn__label" aria-live="polite">Copy</span>
+            </button>
+          </div>
+          <div class="analysis-content" id="analysisContent" role="status" aria-live="polite" aria-busy="false" aria-atomic="false">
+            {% if streaming %}
+            <div class="streaming-analysis-text" id="analysisStreamContent"></div>
+            <div class="streaming-indicator" id="analysisStreamIndicator" aria-hidden="true">
+              <span class="streaming-indicator__icon" aria-hidden="true">✦</span>
+              <span class="sr-only">More content is still streaming in</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="reading-nav">
+      <a href="/reading/one" class="nav-link">draw one card</a>
+      <a href="/reading/three" class="nav-link">three-card spread</a>
+      <a href="/" class="nav-link">another reading</a>
+    </div>
+  </main>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/card-tint.js') }}"></script>
+{% endblock %}

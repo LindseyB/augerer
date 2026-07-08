@@ -1,0 +1,333 @@
+{
+  "the-fool": {
+    "page_url": "https://freesvg.org/fool-tarot-card",
+    "download_url": "https://freesvg.org/download/81583"
+  },
+  "the-magician": {
+    "page_url": "https://freesvg.org/mages-card",
+    "download_url": "https://freesvg.org/download/81575",
+    "verified": true
+  },
+  "the-high-priestess": {
+    "page_url": "https://freesvg.org/priestess-magical-card",
+    "download_url": "https://freesvg.org/download/81573",
+    "verified": true
+  },
+  "the-empress": {
+    "page_url": "https://en.wikipedia.org/wiki/File:RWS_Tarot_03_Empress.jpg",
+    "download_url": "local:RWS_Tarot_03_Empress.svg",
+    "verified": true
+  },
+  "the-emperor": {
+    "page_url": "https://freesvg.org/emperor-card-for-tarot",
+    "download_url": "https://freesvg.org/download/81584"
+  },
+  "the-hierophant": {
+    "page_url": "https://en.wikipedia.org/wiki/File:RWS_Tarot_05_Hierophant.jpg",
+    "download_url": "local:RWS_Tarot_05_Hierophant.svg",
+    "verified": true
+  },
+  "the-lovers": {
+    "page_url": "https://en.wikipedia.org/wiki/File:RWS_Tarot_06_Lovers.jpg",
+    "download_url": "local:RWS_Tarot_06_Lovers.svg",
+    "verified": true
+  },
+  "strength": {
+    "page_url": "https://freesvg.org/strength-occult-card",
+    "download_url": "https://freesvg.org/download/81571"
+  },
+  "the-hermit": {
+    "page_url": "https://freesvg.org/hermit-occult-card",
+    "download_url": "https://freesvg.org/download/81580"
+  },
+  "wheel-of-fortune": {
+    "page_url": "https://en.wikipedia.org/wiki/File:RWS_Tarot_10_Wheel_of_Fortune.jpg",
+    "download_url": "local:RWS_Tarot_10_Wheel_of_Fortune.svg",
+    "verified": true
+  },
+  "justice": {
+    "page_url": "https://freesvg.org/justice-tarot-card-vector-image",
+    "download_url": "https://freesvg.org/download/81577"
+  },
+  "the-hanged-man": {
+    "page_url": "https://freesvg.org/hanging-man-tarot-card",
+    "download_url": "https://freesvg.org/download/81581"
+  },
+  "death": {
+    "page_url": "https://freesvg.org/death-predicting-card",
+    "download_url": "https://freesvg.org/download/81586",
+    "verified": true
+  },
+  "temperance": {
+    "page_url": "https://freesvg.org/temperance-tarot-card",
+    "download_url": "https://freesvg.org/download/81569"
+  },
+  "the-devil": {
+    "page_url": "https://freesvg.org/devil-tarot-card",
+    "download_url": "https://freesvg.org/download/81585"
+  },
+  "the-tower": {
+    "page_url": "https://freesvg.org/tower-tarot-card",
+    "download_url": "https://freesvg.org/download/81568"
+  },
+  "the-star": {
+    "page_url": "https://freesvg.org/star-symbol-occult-card",
+    "download_url": "https://freesvg.org/download/81572",
+    "verified": true
+  },
+  "the-moon": {
+    "page_url": "https://freesvg.org/moon-tarot-card",
+    "download_url": "https://freesvg.org/download/81574"
+  },
+  "the-sun": {
+    "page_url": "https://freesvg.org/sun-occult-card",
+    "download_url": "https://freesvg.org/download/81570"
+  },
+  "judgment": {
+    "page_url": "https://freesvg.org/judgement-magical-card",
+    "download_url": "https://freesvg.org/download/81578",
+    "verified": true
+  },
+  "the-world": {
+    "page_url": "https://freesvg.org/world-tarot-card",
+    "download_url": "https://freesvg.org/download/81567"
+  },
+  "ace-of-wands": {
+    "page_url": "https://freesvg.org/ace-of-wands-card",
+    "download_url": "https://freesvg.org/download/81566"
+  },
+  "two-of-wands": {
+    "page_url": "https://freesvg.org/two-of-wands-magicians-card",
+    "download_url": "https://freesvg.org/download/81613"
+  },
+  "three-of-wands": {
+    "page_url": "https://freesvg.org/three-of-wands-magic-card",
+    "download_url": "https://freesvg.org/download/81614"
+  },
+  "four-of-wands": {
+    "page_url": "https://freesvg.org/four-of-wands-tarot-card",
+    "download_url": "https://freesvg.org/download/81563"
+  },
+  "five-of-wands": {
+    "page_url": "https://freesvg.org/five-wands-with-people",
+    "download_url": "https://freesvg.org/download/81564",
+    "verified": true
+  },
+  "six-of-wands": {
+    "page_url": "https://freesvg.org/rider-on-tarot-card",
+    "download_url": "https://freesvg.org/download/81616",
+    "verified": true
+  },
+  "seven-of-wands": {
+    "page_url": "https://freesvg.org/seven-of-wands-in-tarot-card",
+    "download_url": "https://freesvg.org/download/81617"
+  },
+  "eight-of-wands": {
+    "page_url": "https://freesvg.org/tarot-eight-of-wands",
+    "download_url": "https://freesvg.org/download/81565"
+  },
+  "nine-of-wands": {
+    "page_url": "https://freesvg.org/nine-of-wands-tarot-card",
+    "download_url": "https://freesvg.org/download/81620"
+  },
+  "ten-of-wands": {
+    "page_url": "https://freesvg.org/ten-of-wands-magic-card",
+    "download_url": "https://freesvg.org/download/81615"
+  },
+  "page-of-wands": {
+    "page_url": "https://freesvg.org/page-of-wands-card",
+    "download_url": "https://freesvg.org/download/81619"
+  },
+  "knight-of-wands": {
+    "page_url": "https://freesvg.org/knight-of-wands-tarot-card",
+    "download_url": "https://freesvg.org/download/81561"
+  },
+  "queen-of-wands": {
+    "page_url": "https://freesvg.org/queen-of-wands",
+    "download_url": "https://freesvg.org/download/81618"
+  },
+  "king-of-wands": {
+    "page_url": "https://freesvg.org/king-of-wands-occult-card",
+    "download_url": "https://freesvg.org/download/81562"
+  },
+  "ace-of-cups": {
+    "page_url": "https://freesvg.org/ace-of-cups-magic-card",
+    "download_url": "https://freesvg.org/download/81612"
+  },
+  "two-of-cups": {
+    "page_url": "https://en.wikipedia.org/wiki/File:Cups02.jpg",
+    "download_url": "local:Cups02.svg",
+    "verified": true
+  },
+  "three-of-cups": {
+    "page_url": "https://freesvg.org/three-of-cups-for-fortune-telling",
+    "download_url": "https://freesvg.org/download/81600",
+    "verified": true
+  },
+  "four-of-cups": {
+    "page_url": "https://freesvg.org/four-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81609"
+  },
+  "five-of-cups": {
+    "page_url": "https://freesvg.org/five-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81610"
+  },
+  "six-of-cups": {
+    "page_url": "https://freesvg.org/six-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81602"
+  },
+  "seven-of-cups": {
+    "page_url": "https://freesvg.org/seven-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81603"
+  },
+  "eight-of-cups": {
+    "page_url": "https://freesvg.org/eight-of-cups-in-tarot-ard",
+    "download_url": "https://freesvg.org/download/81611"
+  },
+  "nine-of-cups": {
+    "page_url": "https://freesvg.org/nine-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81606"
+  },
+  "ten-of-cups": {
+    "page_url": "https://freesvg.org/ten-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81601"
+  },
+  "page-of-cups": {
+    "page_url": "https://freesvg.org/page-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81605"
+  },
+  "knight-of-cups": {
+    "page_url": "https://freesvg.org/knight-of-cups-occult-card",
+    "download_url": "https://freesvg.org/download/81607"
+  },
+  "queen-of-cups": {
+    "page_url": "https://freesvg.org/queen-of-cups-occult-card",
+    "download_url": "https://freesvg.org/download/81604"
+  },
+  "king-of-cups": {
+    "page_url": "https://freesvg.org/king-of-cups-tarot-card",
+    "download_url": "https://freesvg.org/download/81608"
+  },
+  "ace-of-swords": {
+    "page_url": "https://freesvg.org/ace-of-swords-on-a-card",
+    "download_url": "https://freesvg.org/download/81639"
+  },
+  "two-of-swords": {
+    "page_url": "https://freesvg.org/two-of-swords-magical-card",
+    "download_url": "https://freesvg.org/download/81626"
+  },
+  "three-of-swords": {
+    "page_url": "https://en.wikipedia.org/wiki/File:Swords03.jpg",
+    "download_url": "local:Swords03.svg",
+    "verified": true
+  },
+  "four-of-swords": {
+    "page_url": "https://freesvg.org/four-of-swords-and-knight-card",
+    "download_url": "https://freesvg.org/download/81636"
+  },
+  "five-of-swords": {
+    "page_url": "https://freesvg.org/five-of-swords-tarot-card",
+    "download_url": "https://freesvg.org/download/81637"
+  },
+  "six-of-swords": {
+    "page_url": "https://freesvg.org/six-of-swords-occult-card",
+    "download_url": "https://freesvg.org/download/81629"
+  },
+  "seven-of-swords": {
+    "page_url": "https://freesvg.org/seven-of-swords-magic-card",
+    "download_url": "https://freesvg.org/download/81630"
+  },
+  "eight-of-swords": {
+    "page_url": "https://en.wikipedia.org/wiki/File:Swords08.jpg",
+    "download_url": "local:Swords08.svg",
+    "verified": true
+  },
+  "nine-of-swords": {
+    "page_url": "https://freesvg.org/swords-with-sleeper",
+    "download_url": "https://freesvg.org/download/81633",
+    "verified": true
+  },
+  "ten-of-swords": {
+    "page_url": "https://freesvg.org/ten-of-swords-occult-card",
+    "download_url": "https://freesvg.org/download/81628"
+  },
+  "page-of-swords": {
+    "page_url": "https://freesvg.org/page-of-swords-in-tarot-card",
+    "download_url": "https://freesvg.org/download/81632"
+  },
+  "knight-of-swords": {
+    "page_url": "https://freesvg.org/knight-of-swords-card",
+    "download_url": "https://freesvg.org/download/81634"
+  },
+  "queen-of-swords": {
+    "page_url": "https://freesvg.org/queen-of-swords-tarot-card",
+    "download_url": "https://freesvg.org/download/81631"
+  },
+  "king-of-swords": {
+    "page_url": "https://freesvg.org/king-of-swords-tarot-card",
+    "download_url": "https://freesvg.org/download/81635"
+  },
+  "ace-of-pentacles": {
+    "page_url": "https://freesvg.org/ace-of-pentacles-in-a-card",
+    "download_url": "https://freesvg.org/download/81598"
+  },
+  "two-of-pentacles": {
+    "page_url": "https://freesvg.org/two-of-pentacles-card",
+    "download_url": "https://freesvg.org/download/81640"
+  },
+  "three-of-pentacles": {
+    "page_url": "https://freesvg.org/three-of-pentacles",
+    "download_url": "https://freesvg.org/download/81641"
+  },
+  "four-of-pentacles": {
+    "page_url": "https://freesvg.org/four-of-pentacles-occult-card",
+    "download_url": "https://freesvg.org/download/81595"
+  },
+  "five-of-pentacles": {
+    "page_url": "https://freesvg.org/five-of-pentacles-in-a-card",
+    "download_url": "https://freesvg.org/download/81596"
+  },
+  "six-of-pentacles": {
+    "page_url": "https://freesvg.org/man-giving-coin-away",
+    "download_url": "https://freesvg.org/download/81643",
+    "verified": true
+  },
+  "seven-of-pentacles": {
+    "page_url": "https://freesvg.org/seven-pentacles-card",
+    "download_url": "https://freesvg.org/download/81644",
+    "verified": true
+  },
+  "eight-of-pentacles": {
+    "page_url": "https://freesvg.org/eight-of-pentacles-card",
+    "download_url": "https://freesvg.org/download/81597"
+  },
+  "nine-of-pentacles": {
+    "page_url": "https://freesvg.org/nine-of-pentacles-tarot-card",
+    "download_url": "https://freesvg.org/download/81592"
+  },
+  "ten-of-pentacles": {
+    "page_url": "https://freesvg.org/ten-of-pentacles-tarot-card",
+    "download_url": "https://freesvg.org/download/81642"
+  },
+  "page-of-pentacles": {
+    "page_url": "https://freesvg.org/page-of-pentacles-tarot-card",
+    "download_url": "https://freesvg.org/download/81591"
+  },
+  "knight-of-pentacles": {
+    "page_url": "https://freesvg.org/knight-of-pentacles-tarot-card",
+    "download_url": "https://freesvg.org/download/81593"
+  },
+  "queen-of-pentacles": {
+    "page_url": "https://freesvg.org/queen-of-pentacles-card",
+    "download_url": "https://freesvg.org/download/81645"
+  },
+  "king-of-pentacles": {
+    "page_url": "https://freesvg.org/king-of-pentacles-occult-card",
+    "download_url": "https://freesvg.org/download/81594"
+  },
+  "the-chariot": {
+    "page_url": "https://freesvg.org/chariot-tarot-card",
+    "download_url": "https://freesvg.org/download/81587",
+    "verified": true
+  }
+}
