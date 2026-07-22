@@ -170,6 +170,11 @@
 
   function finalize(isError) {
     streamActive = false;
+    var drawBtn = document.getElementById('drawBtn');
+    if (drawBtn) {
+      drawBtn.disabled = false;
+      drawBtn.textContent = spread === 'three' ? 'Cast again' : 'Draw again';
+    }
     var contentEl = document.getElementById('interpretationContent');
     var indicator = document.getElementById('streamingIndicator');
     var copyBtn = document.getElementById('copyBtn');
@@ -226,6 +231,14 @@
     } catch (e) { /* silent */ }
   }
 
+  function configureMarked() {
+    if (!window.marked || !window.marked.use || !window.marked.Renderer) return;
+    // Strip raw HTML blocks so AI output injected into innerHTML cannot XSS.
+    var safeRenderer = new window.marked.Renderer();
+    safeRenderer.html = function () { return ''; };
+    window.marked.use({ renderer: safeRenderer });
+  }
+
   function handleDraw() {
     if (streamActive) return;
 
@@ -273,17 +286,13 @@
           revealCard(i, entry, spread === 'three' ? i * 220 : 0);
         });
 
-        // Start streaming after brief pause for card reveal animation
+        // Start streaming after brief pause for card reveal animation.
+        // Button stays disabled until finalize() re-enables it, closing the
+        // race window where a second click could launch a concurrent draw.
         var streamDelay = spread === 'three' ? 700 : 200;
         setTimeout(function () {
           startStreaming(drawn, question);
         }, streamDelay);
-
-        // Update button
-        if (drawBtn) {
-          drawBtn.disabled = false;
-          drawBtn.textContent = spread === 'three' ? 'Cast again' : 'Draw again';
-        }
 
         // Scroll to results
         if (resultSection) {
@@ -301,6 +310,7 @@
   }
 
   function init() {
+    configureMarked();
     var drawBtn = document.getElementById('drawBtn');
     if (drawBtn) drawBtn.addEventListener('click', handleDraw);
   }
