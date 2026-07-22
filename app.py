@@ -652,18 +652,30 @@ def _error_page(code: int, title: str, description: str):
 
 @app.errorhandler(404)
 def not_found(exc):
-    return _error_page(404, "Not found", "The card you seek does not exist in this deck.")
+    return _error_page(
+        404,
+        "Lost in the void",
+        "The stars have no record of this path. Perhaps the cards were never drawn.",
+    )
 
 
 @app.errorhandler(405)
 def method_not_allowed(exc):
-    return _error_page(405, "Not allowed", "That method is not permitted here.")
+    return _error_page(
+        405,
+        "Forbidden ritual",
+        "That invocation is not permitted here. The spirits refuse to answer.",
+    )
 
 
 @app.errorhandler(500)
 def internal_error(exc):
     logger.error("Internal server error: %s", exc)
-    return _error_page(500, "Something broke", "An unexpected error occurred. Try again in a moment.")
+    return _error_page(
+        500,
+        "The veil tore",
+        "Something unraveled in the ether. The reader needs a moment to collect herself.",
+    )
 
 
 if __name__ == "__main__":
