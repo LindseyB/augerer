@@ -1063,6 +1063,29 @@ img {
   top: 0;
 }
 
+/* ------ Error pages ------ */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: calc(100vh - var(--nav-height));
+  padding: 4rem 0;
+}
+
+.error-heading {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin-bottom: 1rem;
+}
+
+.error-desc {
+  color: var(--starlight-dim);
+  font-size: 1rem;
+  max-width: 400px;
+  line-height: 1.65;
+}
+
 /* ------ Footer ------ */
 .site-footer {
   text-align: center;

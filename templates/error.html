@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{ code }} | Aether &amp; Arcana{% endblock %}
+
+{% block content %}
+<main class="page-content" id="main-content" tabindex="-1">
+  <div class="error-page">
+    <p class="eyebrow">{{ code }}</p>
+    <h1 class="display-heading error-heading">{{ title }}</h1>
+    <p class="error-desc">{{ description }}</p>
+    <a href="/" class="btn-primary" style="margin-top:2rem;display:inline-flex;">Return home</a>
+  </div>
+</main>
+{% endblock %}

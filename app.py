@@ -646,5 +646,25 @@ def api_card_by_slug(slug: str):
     return jsonify({"card": card})
 
 
+def _error_page(code: int, title: str, description: str):
+    return render_template("error.html", code=code, title=title, description=description), code
+
+
+@app.errorhandler(404)
+def not_found(exc):
+    return _error_page(404, "Not found", "The card you seek does not exist in this deck.")
+
+
+@app.errorhandler(405)
+def method_not_allowed(exc):
+    return _error_page(405, "Not allowed", "That method is not permitted here.")
+
+
+@app.errorhandler(500)
+def internal_error(exc):
+    logger.error("Internal server error: %s", exc)
+    return _error_page(500, "Something broke", "An unexpected error occurred. Try again in a moment.")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
