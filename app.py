@@ -49,6 +49,25 @@ ZODIAC_SYMBOLS = {
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
+ROMAN_NUMERALS = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
+                  'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI']
+RANK_NAMES = {'1': 'Ace', 'ace': 'Ace', '11': 'Page', 'page': 'Page',
+              '12': 'Knight', 'knight': 'Knight', '13': 'Queen', 'queen': 'Queen',
+              '14': 'King', 'king': 'King'}
+
+
+@app.template_filter('card_number')
+def card_number_filter(card: dict) -> str:
+    suit = str(card.get('suit', '')).lower()
+    rank = card.get('rank', '')
+    if suit == 'major':
+        try:
+            return ROMAN_NUMERALS[int(rank)]
+        except (IndexError, ValueError, TypeError):
+            return str(rank)
+    rank_str = str(rank).lower()
+    return RANK_NAMES.get(rank_str, str(rank).title())
+
 
 def _load_freesvg_sources() -> dict[str, dict[str, str]]:
     if not FREESVG_SOURCES_PATH.exists():
@@ -189,12 +208,12 @@ def _svg_markup_for_card(
         }
     else:
         themes = {
-            "cups": ("#0f2a3a", "#154b60", "#7de4ff"),
-            "swords": ("#1a2233", "#303f5d", "#bfd7ff"),
-            "wands": ("#2f1d15", "#57301e", "#ffbd7f"),
-            "pentacles": ("#1b2f1f", "#314e36", "#c6ff9b"),
-            "coins": ("#1b2f1f", "#314e36", "#c6ff9b"),
-            "major": ("#1a1930", "#3b285a", "#e0b9ff"),
+            "cups":      ("#070d1a", "#1e1b4b", "#fbbf24"),
+            "swords":    ("#070d1a", "#1e1b4b", "#fbbf24"),
+            "wands":     ("#070d1a", "#1e1b4b", "#fbbf24"),
+            "pentacles": ("#070d1a", "#1e1b4b", "#fbbf24"),
+            "coins":     ("#070d1a", "#1e1b4b", "#fbbf24"),
+            "major":     ("#020617", "#1e1b4b", "#fbbf24"),
         }
     color_a, color_b, accent = themes.get(suit, themes["major"])
     if flat:
@@ -327,7 +346,7 @@ def _svg_markup_for_card(
     if prefer_imported and imported_svg_path.exists() and can_use_imported:
         raw = imported_svg_path.read_text(encoding="utf-8")
         if "<svg" in raw and "</svg>" in raw:
-            line_color = flat_color if flat else ("#dceeff" if mode == "dark" else "#1f3552")
+            line_color = flat_color if flat else ("#fbbf24" if mode == "dark" else "#1f3552")
             overlay = (
                 '<g id="augerer-quote-overlay">'
                 f'<text x="50%" y="93.2%" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" '
@@ -348,11 +367,11 @@ def _svg_markup_for_card(
             )
             return raw.replace("</svg>", style + overlay + "</svg>", 1)
 
-    heading_color = "#fefefe" if mode == "dark" else "#10243b"
-    meta_color = "#d5dcf0" if mode == "dark" else "#304765"
-    quote_color = "#eef3ff" if mode == "dark" else "#1e3552"
-    inner_panel = "rgba(7,10,20,0.33)" if mode == "dark" else "rgba(255,255,255,0.5)"
-    inner_stroke = "rgba(255,255,255,0.24)" if mode == "dark" else "rgba(34,61,92,0.24)"
+    heading_color = "#f8fafc" if mode == "dark" else "#10243b"
+    meta_color = "#94a3b8" if mode == "dark" else "#304765"
+    quote_color = "#f0d78c" if mode == "dark" else "#1e3552"
+    inner_panel = "rgba(2,6,23,0.45)" if mode == "dark" else "rgba(255,255,255,0.5)"
+    inner_stroke = "rgba(251,191,36,0.22)" if mode == "dark" else "rgba(34,61,92,0.24)"
 
     if flat:
         return f"""<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"768\" height=\"1280\" viewBox=\"0 0 768 1280\" role=\"img\" aria-label=\"{name}\">\n  <text x=\"384\" y=\"144\" text-anchor=\"middle\" font-family=\"'JetBrains Mono', monospace\" font-size=\"26\" fill=\"{flat_color}\" letter-spacing=\"5\">AUGERER TAROT</text>\n  <text x=\"384\" y=\"214\" text-anchor=\"middle\" font-family=\"'Space Grotesk', sans-serif\" font-size=\"60\" fill=\"{flat_color}\" font-weight=\"700\">{name}</text>\n  <text x=\"384\" y=\"286\" text-anchor=\"middle\" font-family=\"'DM Sans', sans-serif\" font-size=\"29\" fill=\"{flat_color}\">{suit_title} • Rank {rank} • {element}</text>\n  {motif}\n  <text x=\"384\" y=\"1038\" text-anchor=\"middle\" font-family=\"'DM Sans', sans-serif\" font-size=\"28\" fill=\"{flat_color}\">{quote}</text>\n  <text x=\"384\" y=\"1120\" text-anchor=\"middle\" font-family=\"'JetBrains Mono', monospace\" font-size=\"24\" fill=\"{flat_color}\" letter-spacing=\"4\">{card['slug'].upper()}</text>\n</svg>\n"""
@@ -410,6 +429,11 @@ def index() -> str:
     return render_template("index.html")
 
 
+@app.get("/library")
+def library() -> str:
+    return render_template("library.html", cards=CARDS)
+
+
 @app.get("/card/<slug>")
 def card_detail(slug: str) -> str:
     card = CARD_BY_SLUG.get(slug)
@@ -420,11 +444,17 @@ def card_detail(slug: str) -> str:
     if orientation not in {"", "upright", "reversed"}:
         orientation = ""
 
+    card_index = next((i for i, c in enumerate(CARDS) if c["slug"] == slug), -1)
+    prev_card = CARDS[card_index - 1] if card_index > 0 else None
+    next_card = CARDS[card_index + 1] if card_index < len(CARDS) - 1 else None
+
     return render_template(
         "card_detail.html",
         card=card,
         orientation=orientation,
         signs=_signs_with_symbols(card.get("sign", [])),
+        prev_card=prev_card,
+        next_card=next_card,
     )
 
 
@@ -445,14 +475,34 @@ def _draw_reading_cards(count: int) -> list[dict[str, Any]]:
 
 @app.get("/reading/one")
 def reading_one() -> str:
-    cards = _draw_reading_cards(1)
-    return render_template("reading.html", spread="one", cards=cards, streaming=True)
+    return render_template("reading.html", spread="one")
 
 
 @app.get("/reading/three")
 def reading_three() -> str:
-    cards = _draw_reading_cards(3)
-    return render_template("reading.html", spread="three", cards=cards, streaming=True)
+    return render_template("reading.html", spread="three")
+
+
+@app.get("/api/spread")
+def api_spread():
+    try:
+        n = int(request.args.get("n", "1"))
+    except ValueError:
+        n = 1
+    n = max(1, min(n, 3))
+
+    picks = random.sample(CARDS, n)
+    positions = list(THREE_CARD_POSITIONS) if n == 3 else [None] * n
+
+    result = [
+        {
+            "card": card,
+            "orientation": _random_orientation(),
+            "position": position or "",
+        }
+        for card, position in zip(picks, positions)
+    ]
+    return jsonify({"cards": result})
 
 
 @app.post("/stream-reading")
@@ -460,6 +510,7 @@ def stream_reading():
     data = request.get_json(silent=True) or {}
     spread = str(data.get("spread", "")).strip().lower()
     raw_cards = data.get("cards")
+    question = str(data.get("question", "")).strip()[:500]
 
     if spread not in {"one", "three"}:
         return jsonify({"error": "Invalid spread"}), 400
@@ -487,9 +538,9 @@ def stream_reading():
         return jsonify({"error": "AI reading is not configured"}), 503
 
     if spread == "one":
-        chunks = stream_one_card_reading(drawn[0]["card"], drawn[0]["orientation"])
+        chunks = stream_one_card_reading(drawn[0]["card"], drawn[0]["orientation"], question=question or None)
     else:
-        chunks = stream_three_card_reading(drawn)
+        chunks = stream_three_card_reading(drawn, question=question or None)
 
     def generate() -> Iterator[str]:
         try:
