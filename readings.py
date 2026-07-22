@@ -66,10 +66,12 @@ def build_three_card_prompt(drawn: list[dict[str, Any]]) -> str:
     return template.render(card_block="\n\n".join(blocks))
 
 
-def stream_one_card_reading(card: dict[str, Any], orientation: str) -> Iterator[str]:
+def stream_one_card_reading(card: dict[str, Any], orientation: str, question: str | None = None) -> Iterator[str]:
     """Stream a single-card reading, yielding text chunks."""
     template = load_prompt_template("one_card_user.md")
     user_prompt = template.render(card_block=_card_block(card, orientation))
+    if question:
+        user_prompt = f"The querent's question: {question}\n\n{user_prompt}"
     system_content = load_prompt_text("reading_system.md")
 
     try:
@@ -81,7 +83,7 @@ def stream_one_card_reading(card: dict[str, Any], orientation: str) -> Iterator[
         yield _ONE_CARD_FALLBACK
 
 
-def stream_three_card_reading(drawn: list[dict[str, Any]]) -> Iterator[str]:
+def stream_three_card_reading(drawn: list[dict[str, Any]], question: str | None = None) -> Iterator[str]:
     """Stream a past/present/future reading, yielding text chunks."""
     template = load_prompt_template("three_card_user.md")
     blocks = [
@@ -89,6 +91,8 @@ def stream_three_card_reading(drawn: list[dict[str, Any]]) -> Iterator[str]:
         for entry in drawn
     ]
     user_prompt = template.render(card_block="\n\n".join(blocks))
+    if question:
+        user_prompt = f"The querent's question: {question}\n\n{user_prompt}"
     system_content = load_prompt_text("reading_system.md")
 
     try:

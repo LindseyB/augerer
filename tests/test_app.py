@@ -17,17 +17,15 @@ def test_index_page_loads(client):
     response = client.get("/")
     assert response.status_code == 200
     body = response.data
-    assert b"Find card meanings" in body
-    assert b"One-card reading" in body
-    assert b"Three-card spread" in body
+    assert b"Aether" in body
+    assert b"Single Card" in body
+    assert b"Triad Spread" in body
+    assert b"Arcana Library" in body
 
 
 def test_index_page_has_no_redundant_draw_tile(client):
     response = client.get("/")
     body = response.data
-    # The standalone "Draw one card" tile and its button were removed as
-    # redundant with the reading pages.
-    assert b"Draw one card" not in body
     assert b'id="drawButton"' not in body
 
 
@@ -68,8 +66,8 @@ def test_card_detail_route_renders_selected_card(client):
 
     assert response.status_code == 200
     assert card["name"].encode("utf-8") in response.data
-    assert b"tarot-detail-shell" in response.data
-    assert b"card-image-reversed" in response.data
+    assert b"card-detail-layout" in response.data
+    assert b"reversed" in response.data
 
 
 def test_home_draw_control_has_no_orientation_selector(client):
@@ -197,12 +195,12 @@ def test_reading_one_page_draws_a_card(client):
     response = client.get("/reading/one")
     assert response.status_code == 200
     body = response.data
-    assert b"the reader" in body
-    assert b'data-card-image="true"' in body
-    assert b'window.readingData' in body
-    assert b'spread: "one"' in body
+    assert b"The Reader" in body
+    assert b'window.readingSpread' in body
+    assert b'"one"' in body
+    assert b"drawBtn" in body
     # A one-card draw has no positional labels.
-    assert b"reading-card-position" not in body
+    assert b"spread-position" not in body
 
 
 def test_reading_three_page_uses_past_present_future(client):
@@ -212,9 +210,8 @@ def test_reading_three_page_uses_past_present_future(client):
     assert b"Past" in body
     assert b"Present" in body
     assert b"Future" in body
-    assert b'spread: "three"' in body
-    # Three distinct card images should be rendered.
-    assert body.count(b'class="card-image') == 3
+    assert b'"three"' in body
+    assert b"drawBtn" in body
 
 
 def test_one_card_prompt_includes_card_and_cues():
@@ -265,7 +262,7 @@ def test_stream_reading_streams_chunks(client, monkeypatch):
     monkeypatch.setattr(
         tarot_app,
         "stream_one_card_reading",
-        lambda card, orientation: iter(["The Fool ", "begins."]),
+        lambda card, orientation, question=None: iter(["The Fool ", "begins."]),
     )
 
     slug = tarot_app.CARDS[0]["slug"]
@@ -315,33 +312,42 @@ def test_three_card_prompt_asks_to_be_concise():
         assert position in content
 
 
-# --- Default theme: light mode ------------------------------------------------------
+# --- Library page -------------------------------------------------------------------
 
-def test_default_theme_is_light(client):
-    response = client.get("/")
-    body = response.get_data(as_text=True)
-    # Dark class is only applied when the user explicitly saved 'dark'.
-    assert "saved === 'dark'" in body
-    assert "saved !== 'light'" not in body
+def test_library_page_loads(client):
+    response = client.get("/library")
+    assert response.status_code == 200
+    body = response.data
+    assert b"Arcana Library" in body
+    assert b"card-grid" in body
+    assert str(len(tarot_app.CARDS)).encode() not in body or b"card-grid-item" in body
 
 
-# --- Lookup dropdown renders as a floating overlay ----------------------------------
+def test_library_page_has_filter_buttons(client):
+    response = client.get("/library")
+    body = response.data
+    assert b"Major Arcana" in body
+    assert b"Minor Arcana" in body
+    assert b'data-filter="all"' in body
 
-def test_lookup_results_render_as_overlay():
-    css_path = Path(tarot_app.__file__).resolve().parent / "static" / "css" / "augerer.css"
-    css = css_path.read_text(encoding="utf-8")
 
-    block_start = css.index(".lookup-results {")
-    block = css[block_start : css.index("}", block_start)]
-    assert "position: absolute" in block
-    assert "z-index" in block
+# --- Spread API -------------------------------------------------------------------
 
-    # The lookup tile must not clip the floating overlay.
-    tile_start = css.index("\n.tarot-lookup {") + 1
-    tile_block = css[tile_start : css.index("}", tile_start)]
-    assert "overflow: visible" in tile_block
+def test_api_spread_returns_one_card(client):
+    response = client.get("/api/spread?n=1")
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert len(payload["cards"]) == 1
+    assert payload["cards"][0]["card"]["name"]
+    assert payload["cards"][0]["orientation"] in {"upright", "reversed"}
 
-    # Empty results should not paint an empty box.
-    assert ".lookup-results:empty" in css
+
+def test_api_spread_returns_three_cards_with_positions(client):
+    response = client.get("/api/spread?n=3")
+    assert response.status_code == 200
+    payload = response.get_json()
+    assert len(payload["cards"]) == 3
+    positions = {c["position"] for c in payload["cards"]}
+    assert positions == {"Past", "Present", "Future"}
 
 

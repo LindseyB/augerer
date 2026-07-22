@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Arcana Library | Aether &amp; Arcana{% endblock %}
+{% block description %}Browse all 78 tarot cards of the Major and Minor Arcana with upright and reversed meanings.{% endblock %}
+
+{% block content %}
+<main class="page-content" id="main-content" tabindex="-1">
+  <div class="library-header">
+    <p class="eyebrow">Seventy-eight cards</p>
+    <h1 class="display-heading">The Arcana Library</h1>
+    <p>Study the full deck, from the Major Arcana's archetypal figures to the Minor Arcana's everyday forces.</p>
+  </div>
+
+  <div class="library-controls">
+    <input
+      id="librarySearch"
+      type="search"
+      class="question-input library-search"
+      placeholder="Search cards…"
+      autocomplete="off"
+      aria-label="Search cards by name"
+    />
+    <ul class="filter-buttons" role="list" aria-label="Filter by arcana">
+      <li><button class="filter-btn active" data-filter="all" type="button">All 78</button></li>
+      <li><button class="filter-btn" data-filter="major" type="button">Major Arcana</button></li>
+      <li><button class="filter-btn" data-filter="minor" type="button">Minor Arcana</button></li>
+    </ul>
+  </div>
+
+  <div class="card-grid" role="list">
+    {% for card in cards %}
+    <a
+      class="card-grid-item"
+      href="{{ url_for('card_detail', slug=card.slug) }}"
+      data-arcana="{{ card.suit }}"
+      data-name="{{ card.name }}"
+      role="listitem"
+      aria-label="{{ card.name }}"
+    >
+      <div class="card-visual">
+        <img
+          src="{{ url_for('card_image_svg', slug=card.slug, orientation='upright', mode='dark') }}"
+          alt="{{ card.name }} tarot card"
+          loading="lazy"
+          width="200"
+          height="350"
+        />
+      </div>
+      <div class="card-grid-number">
+        {% if card.suit == 'major' %}{{ card | card_number }}{% else %}{{ card.suit | title }}{% endif %}
+      </div>
+      <div class="card-grid-name">{{ card.name }}</div>
+    </a>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/library.js') }}"></script>
+{% endblock %}

@@ -1,122 +1,136 @@
 {% extends "base.html" %}
 
-{% set spread_title = "Three-card spread" if spread == "three" else "One-card draw" %}
-{% block title %}{{ spread_title }} | Augerer Tarot{% endblock %}
+{% set is_three = spread == 'three' %}
+{% block title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
+{% block description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
 
-{% block extra_scripts %}
+{% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="{{ url_for('static', filename='js/reading-stream.js') }}"></script>
-<script>
-  window.readingData = {
-    spread: {{ spread | tojson }},
-    cards: [
-      {% for entry in cards %}
-      {
-        slug: {{ entry.card.slug | tojson }},
-        orientation: {{ entry.orientation | tojson }},
-        position: {{ (entry.position or "") | tojson }}
-      }{% if not loop.last %},{% endif %}
-      {% endfor %}
-    ]
-  };
-</script>
 {% endblock %}
 
 {% block content %}
-{% if streaming %}
-<script>document.body.dataset.streaming = 'true';</script>
-{% endif %}
+<script>window.readingSpread = {{ spread | tojson }};</script>
+<main class="page-content" id="main-content" tabindex="-1">
 
-<header class="site-header" id="siteHeader">
-  <a href="/" class="logo">
-    <span class="logo-mark">✦</span>
-    <span class="logo-text">augerer<span class="logo-dim">.tarot</span></span>
+  <a href="/" class="back-link">
+    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Home
   </a>
-  <div class="header-actions">
-    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
-      <svg class="icon-sun" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      <svg class="icon-moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+
+  <header class="reading-page-header">
+    <p class="eyebrow">{% if is_three %}Deep insight{% else %}Daily Guidance{% endif %}</p>
+    <h1 class="display-heading">{% if is_three %}The Triad Spread{% else %}A single card{% endif %}</h1>
+    <p>
+      {% if is_three %}
+      Three cards drawn as past, present, and future — read together as one narrative about your journey.
+      {% else %}
+      One card drawn for the energy around you right now.
+      {% endif %}
+    </p>
+  </header>
+
+  <div class="reading-input-section">
+    <label for="questionInput" class="sr-only">Ask the cards a question (optional)</label>
+    <input
+      id="questionInput"
+      type="text"
+      class="question-input"
+      placeholder="Ask the cards a question (optional)"
+      autocomplete="off"
+      maxlength="300"
+    />
+    <button id="drawBtn" type="button" class="btn-primary">
+      {% if is_three %}Cast the spread{% else %}Draw a card{% endif %}
     </button>
   </div>
-</header>
 
-<div class="reading-page tarot-reading-page">
-  <main class="reading-main tarot-reading-main" id="main-content" tabindex="-1">
-    <a href="/" class="back-link">
-      <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Back to main
-    </a>
+  <div id="resultSection" hidden>
 
-    <header class="feature-head tarot-feature-head">
-      <p class="eyebrow">{% if spread == "three" %}past · present · future{% else %}your daily draw{% endif %}</p>
-      <h1 class="reading-heading">Your <span class="text-holo">reading.</span></h1>
-      <p class="subtitle">
-        {% if spread == "three" %}
-        Three cards drawn for where you have been, where you are, and where you are headed.
-        {% else %}
-        One card drawn and read for the energy around you right now.
-        {% endif %}
-      </p>
-    </header>
+    {% if is_three %}
+    <div class="reading-divider" aria-hidden="true">Current Spread · The Triad</div>
 
-    <section class="reading-spread reading-spread--{{ spread }}" aria-label="Cards drawn">
-      {% for entry in cards %}
-      <figure class="reading-card">
-        {% if entry.position %}
-        <figcaption class="reading-card-position">{{ entry.position }}</figcaption>
-        {% endif %}
-        <a class="reading-card-link" href="{{ url_for('card_detail', slug=entry.card.slug, orientation=entry.orientation) }}">
-          <img
-            class="card-image{% if entry.orientation == 'reversed' %} card-image-reversed{% endif %}"
-            data-card-image="true"
-            data-base-src="{{ url_for('card_image_svg', slug=entry.card.slug, orientation=entry.orientation) }}"
-            src="{{ url_for('card_image_svg', slug=entry.card.slug, orientation=entry.orientation) }}"
-            alt="{{ entry.card.name }} tarot card illustration"
-          />
-        </a>
-        <figcaption class="reading-card-name">
-          {{ entry.card.name }}
-          <span class="reading-card-orientation">{{ entry.orientation }}</span>
-        </figcaption>
-      </figure>
-      {% endfor %}
-    </section>
-
-    <section class="chrome-border glass chat-panel reading-analysis-panel">
-      <div class="chat-scroll">
-        <div class="msg-ai">
-          <div class="msg-ai-head">
-            <p class="tag">
-              <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.5 20 12 16.6 7.5 20 9 13.6 4 10l6.1-1.2z"/></svg>
-              the reader
-            </p>
-            <button type="button" class="reading-copy-btn" id="copyReadingBtn" hidden>
-              <svg class="reading-copy-btn__icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span class="reading-copy-btn__label" aria-live="polite">Copy</span>
-            </button>
-          </div>
-          <div class="analysis-content" id="analysisContent" role="status" aria-live="polite" aria-busy="false" aria-atomic="false">
-            {% if streaming %}
-            <div class="streaming-analysis-text" id="analysisStreamContent"></div>
-            <div class="streaming-indicator" id="analysisStreamIndicator" aria-hidden="true">
-              <span class="streaming-indicator__icon" aria-hidden="true">✦</span>
-              <span class="sr-only">More content is still streaming in</span>
-            </div>
-            {% endif %}
+    <div class="three-card-spread">
+      {% for pos in ['Past', 'Present', 'Future'] %}
+      <div class="spread-card">
+        <div id="cardVisual{{ loop.index0 }}" class="card-visual">
+          <div class="card-back">
+            <svg class="card-back-pentagram" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="3"/>
+              <circle cx="100" cy="100" r="83" fill="none" stroke="currentColor" stroke-width="11"/>
+              <path d="M100,30 L141,157 L33,78 L167,78 L59,157 Z" fill="currentColor"/>
+            </svg>
+            <div class="card-back-shimmer"></div>
+            <p class="card-back-label">Aether &amp; Arcana</p>
           </div>
         </div>
+        <p class="spread-position">{{ pos }}</p>
+        <p id="cardName{{ loop.index0 }}" class="spread-card-name" aria-live="polite"></p>
+        <p id="cardOrient{{ loop.index0 }}" class="spread-card-orientation"></p>
+        <ul id="cardKeywords{{ loop.index0 }}" class="spread-keywords"></ul>
       </div>
-    </section>
-
-    <div class="reading-nav">
-      <a href="/reading/one" class="nav-link">draw one card</a>
-      <a href="/reading/three" class="nav-link">three-card spread</a>
-      <a href="/" class="nav-link">another reading</a>
+      {% endfor %}
     </div>
-  </main>
-</div>
+
+    <div class="interpretation-box synthesis">
+      <p class="interpretation-label">Synthesis</p>
+      <div id="questionEchoWrap" hidden>
+        <p id="questionEcho" class="interpretation-question"></p>
+      </div>
+      <div
+        id="interpretationContent"
+        class="interpretation-text"
+        role="status"
+        aria-live="polite"
+        aria-atomic="false"
+      ></div>
+      <div id="streamingIndicator" class="streaming-dot" hidden aria-hidden="true"></div>
+      <button id="copyBtn" type="button" class="copy-btn" hidden>Copy reading</button>
+    </div>
+
+    {% else %}
+
+    <div class="one-card-display">
+      <div id="cardVisual0" class="card-visual">
+        <div class="card-back">
+          <svg class="card-back-pentagram" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="3"/>
+            <circle cx="100" cy="100" r="83" fill="none" stroke="currentColor" stroke-width="11"/>
+            <path d="M100,30 L141,157 L33,78 L167,78 L59,157 Z" fill="currentColor"/>
+          </svg>
+          <div class="card-back-shimmer"></div>
+          <p class="card-back-label">Aether &amp; Arcana</p>
+        </div>
+      </div>
+      <div class="card-name-display">
+        <p id="cardName0" class="card-name-heading" aria-live="polite"></p>
+        <p id="cardOrient0" class="card-orientation"></p>
+      </div>
+      <ul id="cardKeywords0" class="keyword-list"></ul>
+    </div>
+
+    <div class="interpretation-box">
+      <p class="interpretation-label">The Reader</p>
+      <div id="questionEchoWrap" hidden>
+        <p id="questionEcho" class="interpretation-question"></p>
+      </div>
+      <div
+        id="interpretationContent"
+        class="interpretation-text"
+        role="status"
+        aria-live="polite"
+        aria-atomic="false"
+      ></div>
+      <div id="streamingIndicator" class="streaming-dot" hidden aria-hidden="true"></div>
+      <button id="copyBtn" type="button" class="copy-btn" hidden>Copy reading</button>
+    </div>
+
+    {% endif %}
+  </div>
+
+  <footer class="site-footer">✦ &nbsp; Aether &amp; Arcana &nbsp; ✦</footer>
+</main>
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ url_for('static', filename='js/card-tint.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reading-ui.js') }}"></script>
 {% endblock %}
