@@ -365,6 +365,7 @@ img {
   object-fit: cover;
   border-radius: var(--radius-xl);
   filter: invert(84%) sepia(63%) saturate(1881%) hue-rotate(330deg) brightness(94%) contrast(110%);
+  opacity: 0.6;
 }
 
 .card-visual.reversed img {
@@ -501,12 +502,37 @@ img {
   letter-spacing: 0.04em;
   border: none;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
   user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(-150%);
+  pointer-events: none;
+}
+
+.btn-primary:hover::after {
+  animation: btn-shine 0.5s ease forwards;
+}
+
+@keyframes btn-shine {
+  to { transform: translateX(200%); }
 }
 
 .btn-primary:hover {
-  background: var(--starlight);
+  background: var(--gold);
+  box-shadow: 0 0 12px 3px rgba(251, 191, 36, 0.4);
 }
 
 .btn-primary:active {

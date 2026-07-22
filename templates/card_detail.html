@@ -2,6 +2,14 @@
 
 {% block title %}{{ card.name }} | Aether &amp; Arcana{% endblock %}
 {% block description %}{{ card.name }} tarot card — upright: {{ card.meanings.upright[:3] | join(', ') }}. Reversed: {{ card.meanings.reversed[:3] | join(', ') }}.{% endblock %}
+{% block og_title %}{{ card.name }} | Aether &amp; Arcana{% endblock %}
+{% block og_description %}{{ card.name }} tarot card — upright: {{ card.meanings.upright[:3] | join(', ') }}. Reversed: {{ card.meanings.reversed[:3] | join(', ') }}.{% endblock %}
+{% block og_image %}{{ url_for('static', filename='screenshots/card-detail.png', _external=True) }}{% endblock %}
+{% block og_image_alt %}{{ card.name }} tarot card{% endblock %}
+{% block twitter_title %}{{ card.name }} | Aether &amp; Arcana{% endblock %}
+{% block twitter_description %}{{ card.name }} tarot card — upright: {{ card.meanings.upright[:3] | join(', ') }}. Reversed: {{ card.meanings.reversed[:3] | join(', ') }}.{% endblock %}
+{% block twitter_image %}{{ url_for('static', filename='screenshots/card-detail.png', _external=True) }}{% endblock %}
+{% block twitter_image_alt %}{{ card.name }} tarot card{% endblock %}
 
 {% block content %}
 <main class="page-content" id="main-content" tabindex="-1">

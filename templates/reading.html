@@ -3,6 +3,14 @@
 {% set is_three = spread == 'three' %}
 {% block title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
 {% block description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block og_title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
+{% block og_description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block og_image %}{{ url_for('static', filename='screenshots/' + ('three-card' if is_three else 'one-card') + '.png', _external=True) }}{% endblock %}
+{% block og_image_alt %}{% if is_three %}The Triad Spread — past, present, future reading{% else %}Single card tarot draw{% endif %}{% endblock %}
+{% block twitter_title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
+{% block twitter_description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block twitter_image %}{{ url_for('static', filename='screenshots/' + ('three-card' if is_three else 'one-card') + '.png', _external=True) }}{% endblock %}
+{% block twitter_image_alt %}{% if is_three %}The Triad Spread — past, present, future reading{% else %}Single card tarot draw{% endif %}{% endblock %}
 
 {% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
