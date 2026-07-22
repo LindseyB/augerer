@@ -371,6 +371,45 @@ img {
   transform: rotate(180deg);
 }
 
+.card-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.08) 35%,
+    transparent 60%
+  );
+  border-radius: var(--radius-xl);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 70%
+  );
+  transform: translateX(-150%);
+  pointer-events: none;
+  border-radius: var(--radius-xl);
+  z-index: 3;
+}
+
+.card-visual:hover::before {
+  animation: card-shine 0.55s ease forwards;
+}
+
+@keyframes card-shine {
+  to { transform: translateX(250%); }
+}
+
 /* Face-down card back */
 .card-back {
   position: absolute;

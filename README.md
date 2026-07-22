@@ -1,70 +1,72 @@
-# Augerer Tarot (Flask)
+# Aether & Arcana
 
-Tarot app with two core features:
+Tarot divination for the modern age. A Flask app with three core features:
 
-1. AI-powered readings — draw a single card or a past / present / future
-   three-card spread and get a witchy interpretation streamed live.
-2. Look up card meanings by name and open a dedicated detail page.
+1. **Single Card** — draw one card and get an AI-powered witchy interpretation streamed live.
+2. **Triad Spread** — draw three cards read together as past, present, and future in one narrative.
+3. **Arcana Library** — browse and search all 78 cards of the Major and Minor Arcana, with upright and reversed meanings.
 
-The UI reuses core Astro styling/ambient JS assets for a near-identical visual feel.
-Each card has a generated SVG image under `static/cards`.
+Each card has a generated SVG image. Reversed draws show the art upside-down and overlay the reversed meaning text.
+
+## Screenshots
+
+![Home](static/screenshots/home.png)
+
+![Arcana Library](static/screenshots/library.png)
+
+![Single Card reading](static/screenshots/one-card.png)
+
+![Triad Spread reading](static/screenshots/three-card.png)
+
+![Card detail — The Fool](static/screenshots/card-detail.png)
 
 ## Run
 
-1. Create and activate your Python environment.
+1. Create and activate a virtual environment:
 
-PowerShell:
-
-```powershell
+```bash
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
 ```
 
 2. Install dependencies:
 
-```powershell
-python -m pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 
-3. Configure the Anthropic token used for AI readings (see below).
+3. Configure the Anthropic API token (see below).
 
 4. Start Flask:
 
-```powershell
+```bash
 python app.py
 ```
 
-5. Open:
-
-http://127.0.0.1:5000
+5. Open http://127.0.0.1:5000
 
 ## AI readings
 
-Readings stream from Anthropic Claude (model `claude-haiku-4-5`). Set an
-`ANTHROPIC_TOKEN` environment variable, either in your shell or in a local
-`.env` file (loaded automatically via `python-dotenv`):
+Readings stream from Anthropic Claude (`claude-haiku-4-5`). Set an `ANTHROPIC_TOKEN` environment variable, or add it to a local `.env` file (loaded automatically via `python-dotenv`):
 
 ```
 ANTHROPIC_TOKEN=sk-ant-...
 ```
 
-Without a token the reading pages still render, but the interpretation endpoint
-returns a friendly "reader unavailable" message instead of streaming text.
+Without a token the reading pages still render, but the interpretation endpoint returns a friendly "reader unavailable" message instead of streaming text.
 
 Reading behavior is driven by editable prompt files in `prompts/`:
 
-- `reading_system.md` — the reader's system voice.
-- `one_card_user.md` — the single-card prompt.
-- `three_card_user.md` — the three-card (past / present / future) prompt.
+- `reading_system.md` — the reader's system voice
+- `one_card_user.md` — the single-card prompt
+- `three_card_user.md` — the triad spread prompt
 
 ## Tests
 
-```powershell
+```bash
 python -m pytest
 ```
 
 ## Card art
 
-Each card renders from an SVG under `static/cards`. Selected FreeSVG source URLs
-are recorded in `data/freesvg_card_sources.json`. Reversed draws show the art
-upside-down and overlay the reversed meaning text.
+Each card renders from an SVG under `static/cards`. Selected FreeSVG source URLs are recorded in `data/freesvg_card_sources.json`.
