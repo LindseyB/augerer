@@ -761,8 +761,11 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
+  max-width: 420px;
+  width: min(100%, 420px);
 }
 
 .one-card-display .card-visual {
