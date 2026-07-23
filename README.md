@@ -37,13 +37,19 @@ pip install -r requirements.txt
 
 3. Configure the Anthropic API token (see below).
 
-4. Start Flask:
+4. Start Flask locally:
 
 ```bash
 python app.py
 ```
 
-5. Open http://127.0.0.1:5000
+5. Start with Gunicorn for production-style deployment:
+
+```bash
+gunicorn app:app
+```
+
+6. Open http://127.0.0.1:8000
 
 ## AI readings
 
