@@ -218,15 +218,6 @@ img {
   padding: 5rem 0 4rem;
 }
 
-.hero-bg {
-  position: absolute;
-  inset: -2rem -2rem 0;
-  background:
-    radial-gradient(ellipse at 20% 60%, rgba(30, 27, 75, 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 75% 80%, rgba(251, 191, 36, 0.05) 0%, transparent 45%);
-  pointer-events: none;
-}
-
 .hero-content {
   position: relative;
   z-index: 1;
@@ -242,6 +233,23 @@ img {
   font-weight: 600;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
+  background: linear-gradient(120deg, var(--gold) 0%, var(--nebula) 45%, var(--nebula-2) 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heroGradientShift 12s ease infinite;
+}
+
+@keyframes heroGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .hero-sub {
@@ -863,14 +871,23 @@ img {
 .interpretation-box {
   max-width: 720px;
   margin: 0 auto 3rem;
-  padding: 2rem 2.25rem;
+  padding: 3rem 2.25rem 2rem;
   background: var(--nebula);
   border: 1px solid rgba(251, 191, 36, 0.2);
   border-radius: var(--radius-xl);
+  position: relative;
 }
 
 .interpretation-box.synthesis {
   border-color: rgba(251, 191, 36, 0.35);
+}
+
+.copy-btn-top-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  margin: 0;
+  z-index: 1;
 }
 
 .interpretation-label {

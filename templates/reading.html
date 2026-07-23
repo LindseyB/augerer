@@ -2,13 +2,13 @@
 
 {% set is_three = spread == 'three' %}
 {% block title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
-{% block description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block description %}{% if is_three %}Three-card past, present, future tarot spread with thoughtful interpretation.{% else %}Single card tarot draw with soulful reading.{% endif %}{% endblock %}
 {% block og_title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
-{% block og_description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block og_description %}{% if is_three %}Three-card past, present, future tarot spread with thoughtful interpretation.{% else %}Single card tarot draw with soulful reading.{% endif %}{% endblock %}
 {% block og_image %}{{ url_for('static', filename='screenshots/' + ('three-card' if is_three else 'one-card') + '.png', _external=True) }}{% endblock %}
 {% block og_image_alt %}{% if is_three %}The Triad Spread — past, present, future reading{% else %}Single card tarot draw{% endif %}{% endblock %}
 {% block twitter_title %}{% if is_three %}The Triad Spread{% else %}Daily Guidance{% endif %} | Aether &amp; Arcana{% endblock %}
-{% block twitter_description %}{% if is_three %}Three-card past, present, future tarot spread with AI interpretation.{% else %}Single card tarot draw with AI-powered reading.{% endif %}{% endblock %}
+{% block twitter_description %}{% if is_three %}Three-card past, present, future tarot spread with thoughtful interpretation.{% else %}Single card tarot draw with soulful reading.{% endif %}{% endblock %}
 {% block twitter_image %}{{ url_for('static', filename='screenshots/' + ('three-card' if is_three else 'one-card') + '.png', _external=True) }}{% endblock %}
 {% block twitter_image_alt %}{% if is_three %}The Triad Spread — past, present, future reading{% else %}Single card tarot draw{% endif %}{% endblock %}
 
@@ -60,8 +60,9 @@
     <div class="three-card-spread">
       {% for pos in ['Past', 'Present', 'Future'] %}
       <div class="spread-card">
-        <div id="cardVisual{{ loop.index0 }}" class="card-visual">
-          <div class="card-back">
+        <a id="cardLink{{ loop.index0 }}" class="card-link" href="#" aria-label="Read more about this card">
+          <div id="cardVisual{{ loop.index0 }}" class="card-visual">
+            <div class="card-back">
             <svg class="card-back-pentagram" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="3"/>
               <circle cx="100" cy="100" r="83" fill="none" stroke="currentColor" stroke-width="11"/>
@@ -71,6 +72,7 @@
             <p class="card-back-label">Aether &amp; Arcana</p>
           </div>
         </div>
+        </a>
         <p class="spread-position">{{ pos }}</p>
         <p id="cardName{{ loop.index0 }}" class="spread-card-name" aria-live="polite"></p>
         <p id="cardOrient{{ loop.index0 }}" class="spread-card-orientation"></p>
@@ -80,6 +82,19 @@
     </div>
 
     <div class="interpretation-box synthesis">
+      <button
+        id="copyBtn"
+        type="button"
+        class="copy-btn copy-btn-top-right"
+        hidden
+        aria-label="Copy the pulled cards and reading text to the clipboard"
+      >
+        <svg class="copy-btn__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        Copy reading
+      </button>
       <p class="interpretation-label">Synthesis</p>
       <div id="questionEchoWrap" hidden>
         <p id="questionEcho" class="interpretation-question"></p>
@@ -92,14 +107,14 @@
         aria-atomic="false"
       ></div>
       <div id="streamingIndicator" class="streaming-dot" hidden aria-hidden="true"></div>
-      <button id="copyBtn" type="button" class="copy-btn" hidden>Copy reading</button>
     </div>
 
     {% else %}
 
     <div class="one-card-display">
-      <div id="cardVisual0" class="card-visual">
-        <div class="card-back">
+      <a id="cardLink0" class="card-link" href="#" aria-label="Read more about this card">
+        <div id="cardVisual0" class="card-visual">
+          <div class="card-back">
           <svg class="card-back-pentagram" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="3"/>
             <circle cx="100" cy="100" r="83" fill="none" stroke="currentColor" stroke-width="11"/>
@@ -117,6 +132,19 @@
     </div>
 
     <div class="interpretation-box">
+      <button
+        id="copyBtn"
+        type="button"
+        class="copy-btn copy-btn-top-right"
+        hidden
+        aria-label="Copy the pulled cards and reading text to the clipboard"
+      >
+        <svg class="copy-btn__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        Copy reading
+      </button>
       <p class="interpretation-label">The Reader</p>
       <div id="questionEchoWrap" hidden>
         <p id="questionEcho" class="interpretation-question"></p>
@@ -129,7 +157,6 @@
         aria-atomic="false"
       ></div>
       <div id="streamingIndicator" class="streaming-dot" hidden aria-hidden="true"></div>
-      <button id="copyBtn" type="button" class="copy-btn" hidden>Copy reading</button>
     </div>
 
     {% endif %}

@@ -4,6 +4,7 @@
   var spread = window.readingSpread;
   var drawn = null;
   var fullText = '';
+  var currentQuestion = '';
   var streamActive = false;
 
   var CARD_BACK_HTML =
@@ -23,6 +24,33 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function buildCopyText(drawnCards, question, reading) {
+    var lines = [];
+    if (question) {
+      lines.push('Question: ' + question, '');
+    }
+
+    if (Array.isArray(drawnCards) && drawnCards.length) {
+      lines.push(drawnCards.length > 1 ? 'Cards pulled:' : 'Card pulled:');
+      drawnCards.forEach(function (entry) {
+        var label = entry.position ? entry.position + ': ' : '';
+        var orientation = entry.orientation === 'reversed' ? ' (reversed)' : ' (upright)';
+        lines.push('- ' + label + entry.card.name + orientation);
+
+        var meanings = entry.card.meanings || {};
+        var cues = (entry.orientation === 'reversed' ? meanings.reversed : meanings.upright) || [];
+        if (Array.isArray(cues) && cues.length) {
+          lines.push('  Keywords: ' + cues.slice(0, 3).join(', '));
+        }
+      });
+      lines.push('');
+    }
+
+    lines.push('Reading:');
+    lines.push(reading.trim());
+    return lines.join('\n');
   }
 
   function cardImageUrl(slug, orientation) {
@@ -55,7 +83,12 @@
     if (contentEl) { contentEl.innerHTML = ''; contentEl.style.whiteSpace = 'pre-wrap'; }
 
     var copyBtn = document.getElementById('copyBtn');
-    if (copyBtn) copyBtn.hidden = true;
+    if (copyBtn) {
+      copyBtn.hidden = true;
+      copyBtn.textContent = 'Copy reading';
+    }
+
+    currentQuestion = '';
 
     var qWrap = document.getElementById('questionEchoWrap');
     if (qWrap) qWrap.hidden = true;
@@ -68,6 +101,12 @@
     setTimeout(function () {
       var visual = document.getElementById('cardVisual' + i);
       if (!visual) return;
+
+      var link = document.getElementById('cardLink' + i);
+      if (link) {
+        link.href = '/card/' + encodeURIComponent(entry.card.slug);
+        link.setAttribute('aria-label', 'Read more about ' + entry.card.name);
+      }
 
       var img = document.createElement('img');
       img.src = cardImageUrl(entry.card.slug, entry.orientation);
@@ -199,16 +238,16 @@
     }
 
     if (copyBtn) {
+      var copyContent = buildCopyText(drawn, currentQuestion, fullText);
       copyBtn.hidden = false;
       copyBtn.onclick = function () {
-        var text = fullText;
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function () {
+          navigator.clipboard.writeText(copyContent).then(function () {
             copyBtn.textContent = 'Copied!';
             setTimeout(function () { copyBtn.textContent = 'Copy reading'; }, 2000);
-          }).catch(function () { fallbackCopy(text, copyBtn); });
+          }).catch(function () { fallbackCopy(copyContent, copyBtn); });
         } else {
-          fallbackCopy(text, copyBtn);
+          fallbackCopy(copyContent, copyBtn);
         }
       };
     }
@@ -245,6 +284,7 @@
     var drawBtn = document.getElementById('drawBtn');
     var qInput = document.getElementById('questionInput');
     var question = qInput ? qInput.value.trim() : '';
+    currentQuestion = question;
 
     if (drawBtn) {
       drawBtn.disabled = true;
