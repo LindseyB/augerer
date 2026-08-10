@@ -29,6 +29,21 @@ def test_index_page_has_no_redundant_draw_tile(client):
     assert b'id="drawButton"' not in body
 
 
+def test_library_page_uses_vanilla_lazyload_contract(client):
+    response = client.get("/library")
+    assert response.status_code == 200
+    body = response.data.decode("utf-8")
+    assert 'class="lazy"' in body
+    assert 'data-src="' in body
+    assert '<noscript>' in body
+    assert 'card-image' in body
+
+    library_script = Path(tarot_app.app.root_path) / 'static' / 'js' / 'library.js'
+    script_contents = library_script.read_text(encoding='utf-8')
+    assert 'window.LazyLoad' in script_contents
+    assert 'elements_selector' in script_contents
+
+
 def test_draw_api_returns_card_and_orientation(client):
     response = client.get("/api/draw")
     assert response.status_code == 200
