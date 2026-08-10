@@ -7,6 +7,13 @@
   var currentFilter = 'all';
   var currentSearch = '';
 
+  if (window.LazyLoad) {
+    new window.LazyLoad({
+      elements_selector: '.lazy',
+      use_native: true
+    });
+  }
+
   function applyFilters() {
     var query = currentSearch.toLowerCase().trim();
     cardItems.forEach(function (item) {
