@@ -47,23 +47,13 @@
     >
       <div class="card-visual">
         <img
-          class="lazy"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-          data-src="{{ url_for('card_image_svg', slug=card.slug, orientation='upright', mode='dark') }}"
+          src="{{ url_for('card_image_svg', slug=card.slug, orientation='upright', mode='dark') }}"
           alt="{{ card.name }} tarot card"
           loading="lazy"
+          decoding="async"
           width="200"
           height="350"
-          decoding="async"
         />
-        <noscript>
-          <img
-            src="{{ url_for('card_image_svg', slug=card.slug, orientation='upright', mode='dark') }}"
-            alt="{{ card.name }} tarot card"
-            width="200"
-            height="350"
-          />
-        </noscript>
       </div>
       <div class="card-grid-number">
         {% if card.suit == 'major' %}{{ card | card_number }}{% else %}{{ card.suit | title }}{% endif %}
@@ -76,6 +66,5 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ url_for('static', filename='js/lazyload.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/library.js') }}"></script>
 {% endblock %}
