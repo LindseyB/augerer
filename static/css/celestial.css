@@ -155,6 +155,7 @@ img {
   text-transform: uppercase;
   color: var(--starlight-dim);
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s;
 }
 
@@ -163,12 +164,20 @@ img {
   color: var(--gold);
 }
 
+/* Stack the logo above the links so neither wraps or clips on phones */
 @media (max-width: 600px) {
+  :root {
+    --nav-height: 5.5rem;
+  }
   .site-nav {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
     padding: 0 1rem;
   }
   .nav-links {
-    gap: 1.25rem;
+    gap: 1.5rem;
+    margin-left: 0;
   }
   .nav-link {
     font-size: 0.625rem;
