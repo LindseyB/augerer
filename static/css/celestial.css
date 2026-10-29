@@ -134,7 +134,6 @@ img {
   width: var(--m);
   height: var(--m);
   border-radius: 50%;
-  /* Outline drawn as an inset shadow (not a border) so lit areas reach the edge cleanly */
   box-shadow: var(--ring);
 }
 
