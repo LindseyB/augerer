@@ -53,7 +53,7 @@
       <h1 class="card-detail-name">{{ card.name }}</h1>
 
       <div class="card-detail-section">
-        <h3>Upright</h3>
+        <h2>Upright</h2>
         <ul class="keyword-list">
           {% for meaning in card.meanings.upright %}
           <li><span class="keyword-badge">{{ meaning }}</span></li>
@@ -62,7 +62,7 @@
       </div>
 
       <div class="card-detail-section">
-        <h3>Reversed</h3>
+        <h2>Reversed</h2>
         <ul class="keyword-list">
           {% for meaning in card.meanings.reversed %}
           <li><span class="keyword-badge reversed">{{ meaning }}</span></li>
@@ -91,6 +91,9 @@
 
   </div>
 
-  <footer class="site-footer">✦ &nbsp; Aether &amp; Arcana &nbsp; ✦</footer>
+  <footer class="site-footer">
+    <div class="moon-phases" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>Aether &amp; Arcana</p>
+  </footer>
 </main>
 {% endblock %}
