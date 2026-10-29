@@ -535,6 +535,10 @@ img {
   .mode-card-eyebrow {
     margin-top: 0.625rem;
   }
+  .mode-card-eyebrow,
+  .mode-card-title {
+    padding-right: 3.25rem;
+  }
 }
 
 .mode-card {
@@ -565,12 +569,14 @@ img {
   transition: opacity 0.4s;
 }
 
-.mode-card:hover {
+.mode-card:hover,
+.mode-card:focus-visible {
   border-color: var(--line-strong);
   transform: translateY(-4px);
 }
 
-.mode-card:hover::after {
+.mode-card:hover::after,
+.mode-card:focus-visible::after {
   opacity: 1;
 }
 
@@ -617,7 +623,8 @@ img {
   transition: background 0.3s, color 0.3s, transform 0.4s var(--ease-expo);
 }
 
-.mode-card:hover .mode-card-arrow {
+.mode-card:hover .mode-card-arrow,
+.mode-card:focus-visible .mode-card-arrow {
   background: var(--bone);
   color: var(--ink);
   transform: rotate(-45deg);
@@ -734,7 +741,7 @@ img {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 0.6875rem;
-  color: rgba(236, 229, 216, 0.5);
+  color: rgba(236, 229, 216, 0.72);
 }
 
 /* ------ Keyword Badges ------ */
@@ -918,6 +925,7 @@ img {
 
 @media (max-width: 600px) {
   .library-controls {
+    position: static;
     border-radius: var(--radius-lg);
   }
   .library-search {
@@ -944,7 +952,7 @@ img {
   .card-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 0.875rem; }
 }
 
-.card-grid-item {
+.card-grid-link {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -957,7 +965,8 @@ img {
   transition: transform 0.5s var(--ease-expo), border-color 0.3s, box-shadow 0.5s;
 }
 
-.card-grid-item:hover .card-visual {
+.card-grid-item:hover .card-visual,
+.card-grid-link:focus-visible .card-visual {
   transform: translateY(-6px) rotate(-1.5deg);
   border-color: rgba(210, 162, 179, 0.5);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(210, 162, 179, 0.12);
@@ -980,7 +989,8 @@ img {
   transition: color 0.2s;
 }
 
-.card-grid-item:hover .card-grid-name {
+.card-grid-item:hover .card-grid-name,
+.card-grid-link:focus-visible .card-grid-name {
   color: var(--mauve);
 }
 
@@ -1350,7 +1360,7 @@ img {
 
 @media (max-width: 768px) {
   .card-detail-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
     padding: 1rem 0 4rem;
   }
@@ -1358,7 +1368,7 @@ img {
 
 .card-detail-art {
   position: sticky;
-  top: calc(var(--nav-height) + 1.5rem);
+  top: calc(var(--nav-height) + 2.5rem);
 }
 
 @media (max-width: 768px) {
@@ -1444,7 +1454,7 @@ img {
   border-top: 1px solid var(--line);
 }
 
-.card-detail-section h3 {
+.card-detail-section h2 {
   font-family: var(--font-display);
   font-size: 1.375rem;
   font-weight: 300;
@@ -1456,7 +1466,7 @@ img {
 .card-nav {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -1470,7 +1480,12 @@ img {
   font-family: var(--font-display);
   font-size: 1.0625rem;
   color: var(--bone-2);
+  overflow-wrap: anywhere;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.card-nav-link svg {
+  flex-shrink: 0;
 }
 
 .card-nav-link:last-child:not(:first-child) {
@@ -1626,12 +1641,32 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .animate-card-rise,
   .animate-fade-in,
   .card-back-shimmer,
   .streaming-dot,
   .hero-moon,
-  .star {
+  .star,
+  #resultSection,
+  .card-visual:hover::before,
+  .btn-primary:hover::after {
     animation: none !important;
   }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+  .card-grid-item:hover .card-visual,
+  .card-grid-link:focus-visible .card-visual,
+  .mode-card:hover,
+  .mode-card:focus-visible,
+  .mode-card:hover .mode-card-arrow,
+  .mode-card:focus-visible .mode-card-arrow {
+    transform: none;
+  }
+  .hero-art:hover .hero-fan .card-visual:nth-child(1) { transform: rotate(-14deg) translateX(-30px); }
+  .hero-art:hover .hero-fan .card-visual:nth-child(2) { transform: translateY(-18px); }
+  .hero-art:hover .hero-fan .card-visual:nth-child(3) { transform: rotate(14deg) translateX(30px); }
 }

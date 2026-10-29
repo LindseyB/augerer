@@ -29,22 +29,16 @@
       aria-label="Search cards by name"
     />
     <ul class="filter-buttons" role="list" aria-label="Filter by arcana">
-      <li><button class="filter-btn active" data-filter="all" type="button">All 78</button></li>
-      <li><button class="filter-btn" data-filter="major" type="button">Major Arcana</button></li>
-      <li><button class="filter-btn" data-filter="minor" type="button">Minor Arcana</button></li>
+      <li><button class="filter-btn active" data-filter="all" type="button" aria-pressed="true">All 78</button></li>
+      <li><button class="filter-btn" data-filter="major" type="button" aria-pressed="false">Major Arcana</button></li>
+      <li><button class="filter-btn" data-filter="minor" type="button" aria-pressed="false">Minor Arcana</button></li>
     </ul>
   </div>
 
-  <div class="card-grid" role="list">
+  <ul class="card-grid">
     {% for card in cards %}
-    <a
-      class="card-grid-item"
-      href="{{ url_for('card_detail', slug=card.slug) }}"
-      data-arcana="{{ card.suit }}"
-      data-name="{{ card.name }}"
-      role="listitem"
-      aria-label="{{ card.name }}"
-    >
+    <li class="card-grid-item" data-arcana="{{ card.suit }}" data-name="{{ card.name }}">
+    <a class="card-grid-link" href="{{ url_for('card_detail', slug=card.slug) }}">
       <div class="card-visual">
         <img
           src="{{ url_for('card_image_svg', slug=card.slug, orientation='upright', mode='dark') }}"
@@ -60,8 +54,9 @@
       </div>
       <div class="card-grid-name">{{ card.name }}</div>
     </a>
+    </li>
     {% endfor %}
-  </div>
+  </ul>
 </main>
 {% endblock %}
 
