@@ -129,23 +129,30 @@ img {
 
 .moon-phases span {
   --m: 10px;
+  --ring: inset 0 0 0 1px var(--line-strong);
+  flex-shrink: 0;
   width: var(--m);
   height: var(--m);
   border-radius: 50%;
-  border: 1px solid var(--line-strong);
+  /* Outline drawn as an inset shadow (not a border) so lit areas reach the edge cleanly */
+  box-shadow: var(--ring);
 }
 
 .moon-phases span:nth-child(4) {
   --m: 14px;
   background: var(--bone);
-  border-color: var(--bone);
   box-shadow: 0 0 14px rgba(236, 229, 216, 0.35);
 }
 
-.moon-phases span:nth-child(3) { background: linear-gradient(90deg, transparent 50%, var(--bone-2) 50%); }
-.moon-phases span:nth-child(5) { background: linear-gradient(90deg, var(--bone-2) 50%, transparent 50%); }
-.moon-phases span:nth-child(2) { box-shadow: inset -3px 0 0 0 var(--bone-2); }
-.moon-phases span:nth-child(6) { box-shadow: inset 3px 0 0 0 var(--bone-2); }
+.moon-phases span:nth-child(3),
+.moon-phases span:nth-child(5) {
+  background-repeat: no-repeat;
+}
+
+.moon-phases span:nth-child(3) { background-image: linear-gradient(90deg, transparent 50%, var(--bone-2) 50%); }
+.moon-phases span:nth-child(5) { background-image: linear-gradient(90deg, var(--bone-2) 50%, transparent 50%); }
+.moon-phases span:nth-child(2) { box-shadow: inset -3px 0 0 0 var(--bone-2), var(--ring); }
+.moon-phases span:nth-child(6) { box-shadow: inset 3px 0 0 0 var(--bone-2), var(--ring); }
 
 /* ------ Navigation ------ */
 .site-nav {
