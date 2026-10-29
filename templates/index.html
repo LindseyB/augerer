@@ -7,45 +7,60 @@
   <section class="hero">
     <div class="hero-content">
       <p class="eyebrow hero-tagline">Divination for the modern age</p>
-      <h1 class="display-heading hero-heading">What do the stars<br>reveal today?</h1>
+      <h1 class="display-heading hero-heading">What do the stars <em>reveal</em> today?</h1>
       <p class="hero-sub">Explore all 78 cards of the Major and Minor Arcana, or draw a reading that feels like a quiet conversation with your cards.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="/reading/one">Draw a card</a>
+        <a class="text-link" href="/library">Browse the library <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-arch"><span class="hero-moon"></span></div>
+      <div class="hero-fan">
+        {% for slug in ['the-high-priestess', 'the-moon', 'the-star'] %}
+        <div class="card-visual">
+          <img src="{{ url_for('card_image_svg', slug=slug, orientation='upright', mode='dark') }}" alt="" width="150" height="262" />
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
 
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Three ways in</p>
+      <h2>Choose your <em>ritual</em></h2>
+    </div>
+    <div class="moon-phases" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+
   <div class="mode-cards">
     <a class="mode-card" href="/reading/one">
+      <span class="mode-card-arrow" aria-hidden="true">→</span>
       <p class="eyebrow mode-card-eyebrow">Daily Guidance</p>
       <h2 class="mode-card-title">Single Card</h2>
       <p class="mode-card-desc">Draw one card and receive a written interpretation streamed live by the reader.</p>
-      <div class="mode-card-placeholder" aria-hidden="true">
-        <div class="mini-card"></div>
-      </div>
     </a>
 
     <a class="mode-card featured" href="/reading/three">
+      <span class="mode-card-arrow" aria-hidden="true">→</span>
       <p class="eyebrow mode-card-eyebrow">Deep Insight</p>
       <h2 class="mode-card-title">The Triad Spread</h2>
       <p class="mode-card-desc">Three cards read as past, present, and future — interpreted together as one narrative.</p>
-      <div class="mode-card-placeholder" aria-hidden="true">
-        <div class="mini-card"></div>
-        <div class="mini-card"></div>
-        <div class="mini-card"></div>
-      </div>
     </a>
 
     <a class="mode-card" href="/library">
+      <span class="mode-card-arrow" aria-hidden="true">→</span>
       <p class="eyebrow mode-card-eyebrow">Encyclopedia</p>
       <h2 class="mode-card-title">Arcana Library</h2>
       <p class="mode-card-desc">Browse and study all 78 cards of the deck, with upright and reversed meanings for each.</p>
-      <div class="mode-card-placeholder" aria-hidden="true">
-        <div class="mini-card"></div>
-        <div class="mini-card"></div>
-        <div class="mini-card"></div>
-        <div class="mini-card"></div>
-      </div>
     </a>
   </div>
 
-  <footer class="site-footer">✦ &nbsp; Aether &amp; Arcana &nbsp; ✦</footer>
+  <footer class="site-footer">
+    <div class="moon-phases" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>Aether &amp; Arcana</p>
+  </footer>
 </main>
 {% endblock %}
