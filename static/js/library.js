@@ -7,8 +7,21 @@
   var currentFilter = 'all';
   var currentSearch = '';
 
+  // Lets "2 of cups" match "Two of Cups" (and "1"/"11"-"14" match court/ace names).
+  var NUMBER_WORDS = {
+    '1': 'ace', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
+    '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '10': 'ten',
+    '11': 'page', '12': 'knight', '13': 'queen', '14': 'king'
+  };
+
+  function normalizeQuery(query) {
+    return query.replace(/\b\d+\b/g, function (digits) {
+      return NUMBER_WORDS[String(Number(digits))] || digits;
+    });
+  }
+
   function applyFilters() {
-    var query = currentSearch.toLowerCase().trim();
+    var query = normalizeQuery(currentSearch.toLowerCase().trim());
     cardItems.forEach(function (item) {
       var arcana = item.dataset.arcana || '';
       var name = (item.dataset.name || '').toLowerCase();
