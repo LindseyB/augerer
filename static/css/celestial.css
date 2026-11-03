@@ -1389,7 +1389,6 @@ img {
   position: absolute;
   inset: -2rem -1.25rem 4rem;
   border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
-  border: 1px solid var(--line);
   background: radial-gradient(circle at 50% 25%, rgba(210, 162, 179, 0.14), transparent 60%);
   z-index: -1;
 }
