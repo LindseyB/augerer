@@ -361,3 +361,25 @@ def test_api_spread_returns_three_cards_with_positions(client):
     assert positions == {"Past", "Present", "Future"}
 
 
+
+
+@pytest.mark.parametrize(
+    ("query", "expected"),
+    [
+        ("2 of cups", "Two of Cups"),
+        ("10 of swords", "Ten of Swords"),
+        ("1 of wands", "Ace of Wands"),
+        ("14 of pentacles", "King of Pentacles"),
+    ],
+)
+def test_lookup_api_accepts_numeric_ranks(client, query, expected):
+    response = client.get(f"/api/lookup?q={query}")
+    assert response.status_code == 200
+    names = [result["name"] for result in response.get_json()["results"]]
+    assert names[0] == expected
+
+
+def test_normalize_card_query_spells_out_numbers():
+    assert tarot_app.normalize_card_query("3 of wands") == "three of wands"
+    assert tarot_app.normalize_card_query("three of wands") == "three of wands"
+    assert tarot_app.normalize_card_query("99") == "99"
