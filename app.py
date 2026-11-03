@@ -55,7 +55,6 @@ RANK_NAMES = {'1': 'Ace', 'ace': 'Ace', '11': 'Page', 'page': 'Page',
               '12': 'Knight', 'knight': 'Knight', '13': 'Queen', 'queen': 'Queen',
               '14': 'King', 'king': 'King'}
 
-# Lets searches like "2 of cups" match "Two of Cups".
 NUMBER_WORDS = {'1': 'ace', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
                 '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '10': 'ten',
                 '11': 'page', '12': 'knight', '13': 'queen', '14': 'king'}
