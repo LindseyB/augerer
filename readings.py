@@ -87,9 +87,8 @@ def _deep_card_block(card: dict[str, Any], orientation: str | None) -> str:
 def _deep_focus(orientation: str | None) -> str:
     if orientation in {"upright", "reversed"}:
         return (
-            f"The querent drew this card {orientation}, so give the "
-            f"{orientation.title()} section the most weight and let it shape "
-            "the guidance."
+            f"The querent drew this card {orientation}, so let the "
+            f"{orientation} meaning lead For You Now and the Guidance."
         )
     return "Give the upright and reversed meanings equal weight."
 
