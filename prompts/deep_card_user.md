@@ -13,9 +13,7 @@ Use a bold heading for each of these sections, in this order:
 **Symbolism**: 2 sentences weaving the card's key imagery with its element, number, and any planet or sign.
 **Upright**: 1-2 sentences.
 **Reversed**: 1-2 sentences.
-**For You Now**: 1-2 gentle sentences on how this energy may be showing up in your life today.
-**Guidance**: 3 bullet points, each one short, clear action on a single line.
-**Reflection**: 2 short journaling questions.
+**For You Now**: 3-5 gentle sentences on how this card's energy may be showing up in your life today, touching on both its upright and reversed sides.
 
 CARD:
 {card_block}

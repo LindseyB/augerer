@@ -416,8 +416,10 @@ def test_deep_card_prompt_includes_both_orientations_and_correspondences():
     assert "Element: Air" in prompt
     assert "Planet: Uranus" in prompt
     assert "equal weight" in prompt
-    for section in ("Symbolism", "Upright", "Reversed", "For You Now", "Guidance", "Reflection"):
+    for section in ("Symbolism", "Upright", "Reversed", "For You Now"):
         assert f"**{section}**" in prompt
+    for removed in ("Guidance", "Reflection"):
+        assert f"**{removed}**" not in prompt
 
 
 def test_deep_card_prompt_focuses_on_orientation():
@@ -515,3 +517,10 @@ def test_deep_card_prompt_is_concise_and_warm():
     assert '"you"' in content
     # The old separate astrology section was folded into Symbolism.
     assert "elemental & astrological ties" not in content
+
+
+def test_deep_card_for_you_now_covers_both_orientations():
+    content = readings.load_prompt_template("deep_card_user.md").content
+    line = next(l for l in content.splitlines() if l.startswith("**For You Now**"))
+    assert "3-5" in line
+    assert "upright" in line and "reversed" in line
