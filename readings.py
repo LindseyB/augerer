@@ -20,6 +20,11 @@ _ONE_CARD_FALLBACK = (
     "**The cards are quiet.** The reader is taking a cosmic tea break. "
     "Sit with the card you drew and trust your own intuition. \u2728"
 )
+_DEEP_CARD_FALLBACK = (
+    "**The cards are quiet.** The reader is taking a cosmic tea break. "
+    "Sit with this card a while, study its imagery, and trust your own "
+    "intuition. \u2728"
+)
 _THREE_CARD_FALLBACK = (
     "**The cards are quiet.** The reader is taking a cosmic tea break. "
     "Reflect on your three cards as past, present, and future, and trust "
@@ -50,6 +55,51 @@ def _card_block(card: dict[str, Any], orientation: str, position: str | None = N
     details = f"  Suit: {suit} \u00b7 Rank: {rank}"
     cue_line = f"  {orientation.title()} meaning cues: {cue_text}"
     return "\n".join([header, details, cue_line])
+
+
+def _deep_card_block(card: dict[str, Any], orientation: str | None) -> str:
+    meanings = card.get("meanings", {}) or {}
+
+    def cues(key: str) -> str:
+        values = meanings.get(key) or []
+        return ", ".join(str(v) for v in values) if values else "(no cues on file)"
+
+    suit = str(card.get("suit", "") or "unknown")
+    lines = [f"- {card.get('name', 'Unknown card')}"]
+    if orientation in {"upright", "reversed"}:
+        lines[0] += f" ({orientation.title()})"
+    lines.append(
+        f"  Arcana: {'Major' if suit.lower() == 'major' else 'Minor'}"
+        f" \u00b7 Suit: {suit.title()} \u00b7 Rank: {card.get('rank', '')}"
+    )
+    if card.get("element"):
+        lines.append(f"  Element: {str(card['element']).title()}")
+    if card.get("planet"):
+        lines.append(f"  Planet: {str(card['planet']).title()}")
+    signs = card.get("sign") or []
+    if signs:
+        lines.append(f"  Signs: {', '.join(str(s).title() for s in signs)}")
+    lines.append(f"  Upright meaning cues: {cues('upright')}")
+    lines.append(f"  Reversed meaning cues: {cues('reversed')}")
+    return "\n".join(lines)
+
+
+def _deep_focus(orientation: str | None) -> str:
+    if orientation in {"upright", "reversed"}:
+        return (
+            f"The querent drew this card {orientation}, so give the "
+            f"{orientation.title()} section the most weight and let it shape "
+            "the guidance."
+        )
+    return "Give the upright and reversed meanings equal weight."
+
+
+def build_deep_card_prompt(card: dict[str, Any], orientation: str | None = None) -> str:
+    template = load_prompt_template("deep_card_user.md")
+    return template.render(
+        card_block=_deep_card_block(card, orientation),
+        focus=_deep_focus(orientation),
+    )
 
 
 def build_one_card_prompt(card: dict[str, Any], orientation: str) -> str:
@@ -102,3 +152,18 @@ def stream_three_card_reading(drawn: list[dict[str, Any]], question: str | None 
     except Exception as exc:  # pragma: no cover - network/credential errors
         logger.error("Error streaming three-card reading: %s", exc)
         yield _THREE_CARD_FALLBACK
+
+
+def stream_deep_card_reading(card: dict[str, Any], orientation: str | None = None) -> Iterator[str]:
+    """Stream an in-depth study of a single card, yielding text chunks."""
+    template = load_prompt_template("deep_card_user.md")
+    user_prompt = build_deep_card_prompt(card, orientation)
+    system_content = load_prompt_text("reading_system.md")
+
+    try:
+        yield from stream_ai_api(
+            system_content, user_prompt, temperature=_prompt_temperature(template.metadata)
+        )
+    except Exception as exc:  # pragma: no cover - network/credential errors
+        logger.error("Error streaming deep card reading: %s", exc)
+        yield _DEEP_CARD_FALLBACK

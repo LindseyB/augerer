@@ -5,6 +5,7 @@ Tarot divination for the modern age. A Flask app with three core features:
 1. **Single Card** — draw one card and get an AI-powered witchy interpretation streamed live.
 2. **Triad Spread** — draw three cards read together as past, present, and future in one narrative.
 3. **Arcana Library** — browse and search all 78 cards of the Major and Minor Arcana, with upright and reversed meanings.
+4. **Dive Deeper** — from any card's detail page, stream a full in-depth AI study of that one card: imagery and symbolism, elemental and astrological ties, upright and reversed meanings, guidance, and journaling prompts.
 
 Each card has a generated SVG image. Reversed draws show the art upside-down and overlay the reversed meaning text.
 
@@ -19,6 +20,10 @@ Each card has a generated SVG image. Reversed draws show the art upside-down and
 ![Triad Spread reading](static/screenshots/three-card.png)
 
 ![Card detail — The Fool](static/screenshots/card-detail.png)
+
+![Card detail — Dive deeper](static/screenshots/card-dive-deeper.png)
+
+![Card detail — in-depth reading](static/screenshots/card-deep-dive.png)
 
 ## Run
 
@@ -66,6 +71,7 @@ Reading behavior is driven by editable prompt files in `prompts/`:
 - `reading_system.md` — the reader's system voice
 - `one_card_user.md` — the single-card prompt
 - `three_card_user.md` — the triad spread prompt
+- `deep_card_user.md` — the in-depth single-card study ("Dive deeper")
 
 ## Tests
 

@@ -11,6 +11,10 @@
 {% block twitter_image %}{{ url_for('static', filename='screenshots/card-detail.png', _external=True) }}{% endblock %}
 {% block twitter_image_alt %}{{ card.name }} tarot card{% endblock %}
 
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <main class="page-content" id="main-content" tabindex="-1">
 
@@ -70,6 +74,48 @@
         </ul>
       </div>
 
+      <section
+        class="card-detail-section deep-dive"
+        id="deepDive"
+        data-slug="{{ card.slug }}"
+        data-orientation="{{ orientation }}"
+        data-card-name="{{ card.name }}"
+        aria-labelledby="deepDiveHeading"
+      >
+        <h2 id="deepDiveHeading">Dive deeper</h2>
+        <p class="deep-dive-intro">
+          Sit with {{ card.name }}{% if orientation %} {{ orientation }}{% endif %} a while longer: its symbolism, elemental ties, and what it asks of you now.
+        </p>
+        <button id="deepDiveBtn" type="button" class="btn-primary">
+          <span class="moon-icon" aria-hidden="true"></span> Dive deeper
+        </button>
+
+        <div id="deepDiveResult" class="interpretation-box deep-dive-box" hidden>
+          <button
+            id="deepDiveCopyBtn"
+            type="button"
+            class="copy-btn copy-btn-top-right"
+            hidden
+            aria-label="Copy the in-depth reading text to the clipboard"
+          >
+            <svg class="copy-btn__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Copy reading
+          </button>
+          <p class="interpretation-label">The Reader</p>
+          <div
+            id="deepDiveContent"
+            class="interpretation-text"
+            role="status"
+            aria-live="polite"
+            aria-atomic="false"
+          ></div>
+          <div id="deepDiveIndicator" class="streaming-dot" hidden aria-hidden="true"></div>
+        </div>
+      </section>
+
       <div class="card-nav">
         {% if prev_card %}
         <a class="card-nav-link" href="{{ url_for('card_detail', slug=prev_card.slug) }}">
@@ -96,4 +142,8 @@
     <p>Aether &amp; Arcana</p>
   </footer>
 </main>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/card-deep-dive.js') }}"></script>
 {% endblock %}
