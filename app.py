@@ -22,6 +22,7 @@ from flask import (
 
 from readings import (
     THREE_CARD_POSITIONS,
+    stream_deep_card_reading,
     stream_one_card_reading,
     stream_three_card_reading,
 )
@@ -550,6 +551,28 @@ def stream_reading():
     else:
         chunks = stream_three_card_reading(drawn, question=question or None)
 
+    return _sse_response(chunks, "stream_reading")
+
+
+@app.post("/stream-deep-reading")
+def stream_deep_reading():
+    data = request.get_json(silent=True) or {}
+    card = CARD_BY_SLUG.get(str(data.get("slug", "")))
+    if not card:
+        return jsonify({"error": "Unknown card"}), 400
+
+    orientation = str(data.get("orientation", "")).strip().lower()
+    if orientation not in {"upright", "reversed"}:
+        orientation = ""
+
+    if not has_ai_client():
+        return jsonify({"error": "AI reading is not configured"}), 503
+
+    chunks = stream_deep_card_reading(card, orientation or None)
+    return _sse_response(chunks, "stream_deep_reading")
+
+
+def _sse_response(chunks: Iterator[str], label: str) -> Response:
     def generate() -> Iterator[str]:
         try:
             for chunk in chunks:
@@ -557,7 +580,7 @@ def stream_reading():
                     yield f"data: {json.dumps({'chunk': chunk})}\n\n"
             yield f"data: {json.dumps({'done': True})}\n\n"
         except Exception as exc:  # pragma: no cover - stream runtime errors
-            logger.error("Error in stream_reading: %s", exc)
+            logger.error("Error in %s: %s", label, exc)
             yield f"data: {json.dumps({'error': 'Failed to stream reading'})}\n\n"
 
     return Response(stream_with_context(generate()), mimetype="text/event-stream")

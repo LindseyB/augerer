@@ -383,3 +383,125 @@ def test_normalize_card_query_spells_out_numbers():
     assert tarot_app.normalize_card_query("3 of wands") == "three of wands"
     assert tarot_app.normalize_card_query("three of wands") == "three of wands"
     assert tarot_app.normalize_card_query("99") == "99"
+
+
+# --- Card deep dive -----------------------------------------------------------------
+
+def test_card_detail_has_dive_deeper_section(client):
+    response = client.get("/card/the-fool?orientation=reversed")
+    assert response.status_code == 200
+    body = response.get_data(as_text=True)
+    assert 'id="deepDiveBtn"' in body
+    assert "Dive deeper" in body
+    assert 'data-slug="the-fool"' in body
+    assert 'data-orientation="reversed"' in body
+    assert 'id="deepDiveResult"' in body
+    assert "interpretation-box" in body
+    assert "js/card-deep-dive.js" in body
+    assert "marked.min.js" in body
+
+
+def test_card_detail_dive_deeper_without_orientation(client):
+    response = client.get("/card/the-fool")
+    body = response.get_data(as_text=True)
+    assert 'data-orientation=""' in body
+
+
+def test_deep_card_prompt_includes_both_orientations_and_correspondences():
+    card = tarot_app.CARD_BY_SLUG["the-fool"]
+    prompt = readings.build_deep_card_prompt(card)
+    assert card["name"] in prompt
+    assert card["meanings"]["upright"][0] in prompt
+    assert card["meanings"]["reversed"][0] in prompt
+    assert "Element: Air" in prompt
+    assert "Planet: Uranus" in prompt
+    assert "equal weight" in prompt
+    for section in ("Imagery & Symbolism", "Upright", "Reversed", "Guidance", "Reflection"):
+        assert section in prompt
+
+
+def test_deep_card_prompt_focuses_on_orientation():
+    card = tarot_app.CARD_BY_SLUG["the-fool"]
+    prompt = readings.build_deep_card_prompt(card, "reversed")
+    assert "The Fool (Reversed)" in prompt
+    assert "drew this card reversed" in prompt
+    assert "equal weight" not in prompt
+
+
+def test_deep_card_prompt_lists_signs_when_present():
+    card = next(c for c in tarot_app.CARDS if c["sign"])
+    prompt = readings.build_deep_card_prompt(card)
+    assert "Signs: " + card["sign"][0].title() in prompt
+
+
+def test_stream_deep_card_reading_uses_deep_prompt(monkeypatch):
+    captured = {}
+
+    def fake_stream(system_content, user_prompt, temperature=0.8):
+        captured["system"] = system_content
+        captured["user"] = user_prompt
+        yield "deep "
+        yield "words"
+
+    monkeypatch.setattr(readings, "stream_ai_api", fake_stream)
+    card = tarot_app.CARD_BY_SLUG["the-fool"]
+    chunks = list(readings.stream_deep_card_reading(card, "upright"))
+    assert chunks == ["deep ", "words"]
+    assert "Imagery & Symbolism" in captured["user"]
+    assert "witch" in captured["system"].lower()
+
+
+def test_stream_deep_card_reading_falls_back_on_error(monkeypatch):
+    def boom(*args, **kwargs):
+        raise RuntimeError("no network")
+        yield  # pragma: no cover
+
+    monkeypatch.setattr(readings, "stream_ai_api", boom)
+    card = tarot_app.CARD_BY_SLUG["the-fool"]
+    chunks = list(readings.stream_deep_card_reading(card))
+    assert len(chunks) == 1
+    assert "cosmic tea break" in chunks[0]
+
+
+def test_stream_deep_reading_rejects_unknown_card(client):
+    response = client.post("/stream-deep-reading", json={"slug": "not-a-real-card"})
+    assert response.status_code == 400
+
+
+def test_stream_deep_reading_rejects_missing_body(client):
+    response = client.post("/stream-deep-reading")
+    assert response.status_code == 400
+
+
+def test_stream_deep_reading_requires_ai_client(client, monkeypatch):
+    monkeypatch.setattr(tarot_app, "has_ai_client", lambda: False)
+    response = client.post("/stream-deep-reading", json={"slug": "the-fool"})
+    assert response.status_code == 503
+
+
+@pytest.mark.parametrize(
+    "sent, expected",
+    [("reversed", "reversed"), ("UPRIGHT", "upright"), ("", None), ("sideways", None)],
+)
+def test_stream_deep_reading_streams_chunks(client, monkeypatch, sent, expected):
+    calls = {}
+
+    def fake_deep(card, orientation=None):
+        calls["card"] = card
+        calls["orientation"] = orientation
+        return iter(["The Fool ", "leaps."])
+
+    monkeypatch.setattr(tarot_app, "has_ai_client", lambda: True)
+    monkeypatch.setattr(tarot_app, "stream_deep_card_reading", fake_deep)
+
+    response = client.post(
+        "/stream-deep-reading", json={"slug": "the-fool", "orientation": sent}
+    )
+    assert response.status_code == 200
+    assert response.mimetype == "text/event-stream"
+    body = response.get_data(as_text=True)
+    assert '"chunk": "The Fool "' in body
+    assert '"chunk": "leaps."' in body
+    assert '"done": true' in body
+    assert calls["card"]["slug"] == "the-fool"
+    assert calls["orientation"] == expected
