@@ -416,8 +416,8 @@ def test_deep_card_prompt_includes_both_orientations_and_correspondences():
     assert "Element: Air" in prompt
     assert "Planet: Uranus" in prompt
     assert "equal weight" in prompt
-    for section in ("Imagery & Symbolism", "Upright", "Reversed", "Guidance", "Reflection"):
-        assert section in prompt
+    for section in ("Symbolism", "Upright", "Reversed", "For You Now", "Guidance", "Reflection"):
+        assert f"**{section}**" in prompt
 
 
 def test_deep_card_prompt_focuses_on_orientation():
@@ -425,6 +425,7 @@ def test_deep_card_prompt_focuses_on_orientation():
     prompt = readings.build_deep_card_prompt(card, "reversed")
     assert "The Fool (Reversed)" in prompt
     assert "drew this card reversed" in prompt
+    assert "reversed meaning lead" in prompt
     assert "equal weight" not in prompt
 
 
@@ -447,7 +448,7 @@ def test_stream_deep_card_reading_uses_deep_prompt(monkeypatch):
     card = tarot_app.CARD_BY_SLUG["the-fool"]
     chunks = list(readings.stream_deep_card_reading(card, "upright"))
     assert chunks == ["deep ", "words"]
-    assert "Imagery & Symbolism" in captured["user"]
+    assert "**Symbolism**" in captured["user"]
     assert "witch" in captured["system"].lower()
 
 
@@ -505,3 +506,12 @@ def test_stream_deep_reading_streams_chunks(client, monkeypatch, sent, expected)
     assert '"done": true' in body
     assert calls["card"]["slug"] == "the-fool"
     assert calls["orientation"] == expected
+
+
+def test_deep_card_prompt_is_concise_and_warm():
+    content = readings.load_prompt_template("deep_card_user.md").content.lower()
+    assert "about 250 words" in content
+    assert "warm" in content
+    assert '"you"' in content
+    # The old separate astrology section was folded into Symbolism.
+    assert "elemental & astrological ties" not in content

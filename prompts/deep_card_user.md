@@ -4,19 +4,18 @@ role: user
 temperature: 0.8
 ---
 
-Give a full, in-depth witchy reading of the single card below, as if you are sitting with the querent and studying this one card together by candlelight. {focus}
+Give a warm, caring, in-depth reading of the single card below, as if you are sitting with the querent by candlelight. {focus}
+
+Be concise: about 250 words in total. Speak to the querent as "you" in every section, the way a friend who reads cards would, not like a reference book. Say each idea once and don't repeat it in a later section.
 
 Use a bold heading for each of these sections, in this order:
 
-**Imagery & Symbolism**: walk through the traditional imagery of this card and what each symbol carries.
-**Elemental & Astrological Ties**: its suit, element, number or rank, and any planet or sign, and how they color its meaning.
-**Upright**: what the card means when it lands upright, in love, work, and inner life.
-**Reversed**: what shifts when it lands reversed, blocked, inverted, or turned inward.
-**In Your Life Now**: how this card's energy might be showing up for the querent today.
-**Guidance**: about 3 clear, definitive actions the querent can take.
-**Reflection**: 3 short journaling prompts.
-
-Keep each section to 2-4 sentences, rich but grounded.
+**Symbolism**: 2 sentences weaving the card's key imagery with its element, number, and any planet or sign.
+**Upright**: 1-2 sentences.
+**Reversed**: 1-2 sentences.
+**For You Now**: 1-2 gentle sentences on how this energy may be showing up in your life today.
+**Guidance**: 3 bullet points, each one short, clear action on a single line.
+**Reflection**: 2 short journaling questions.
 
 CARD:
 {card_block}
