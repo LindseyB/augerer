@@ -88,7 +88,7 @@ def _deep_focus(orientation: str | None) -> str:
     if orientation in {"upright", "reversed"}:
         return (
             f"The querent drew this card {orientation}, so let the "
-            f"{orientation} meaning lead For You Now and the Guidance."
+            f"{orientation} meaning lead For You Now."
         )
     return "Give the upright and reversed meanings equal weight."
 

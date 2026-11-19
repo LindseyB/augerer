@@ -36,6 +36,18 @@
 }
 
 /* ------ Reset & Base ------ */
+/* Component display rules (e.g. .btn-primary, .streaming-dot) would
+   otherwise override the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
+::selection {
+  background: var(--mauve);
+  color: var(--ink);
+}
+
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -1521,13 +1533,13 @@ img {
   flex-shrink: 0;
 }
 
-.deep-dive .btn-primary[hidden] {
-  display: none;
-}
-
 .deep-dive-box {
   margin: 2rem 0 1rem;
   scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+}
+
+.deep-dive-box .interpretation-text strong {
+  color: var(--sage);
 }
 
 .deep-dive-box .interpretation-text h1,
