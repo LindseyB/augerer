@@ -1512,6 +1512,19 @@ img {
   max-width: 34rem;
 }
 
+.moon-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: inset -4px 1px 0 0 currentColor;
+  flex-shrink: 0;
+}
+
+.deep-dive .btn-primary[hidden] {
+  display: none;
+}
+
 .deep-dive-box {
   margin: 2rem 0 1rem;
   scroll-margin-top: calc(var(--nav-height) + 1.5rem);

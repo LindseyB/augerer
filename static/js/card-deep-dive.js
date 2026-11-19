@@ -61,16 +61,19 @@
 
     function finalize(isError) {
       streamActive = false;
-      btn.disabled = false;
-      btn.innerHTML = '<span aria-hidden="true">✦</span> Read again';
       if (indicator) indicator.hidden = true;
       contentEl.setAttribute('aria-busy', 'false');
       contentEl.style.whiteSpace = 'normal';
 
       if (isError || !fullText) {
+        // Let the querent try again if the reader couldn't come through.
+        btn.disabled = false;
+        btn.innerHTML = '<span class="moon-icon" aria-hidden="true"></span> Dive deeper';
         contentEl.innerHTML = ERROR_HTML;
         return;
       }
+
+      btn.hidden = true;
 
       if (window.marked && window.marked.parse) {
         contentEl.innerHTML = window.marked.parse(fullText);
