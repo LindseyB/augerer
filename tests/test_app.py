@@ -512,9 +512,11 @@ def test_stream_deep_reading_streams_chunks(client, monkeypatch, sent, expected)
 
 def test_deep_card_prompt_is_concise_and_warm():
     content = readings.load_prompt_template("deep_card_user.md").content.lower()
-    assert "about 250 words" in content
-    assert "warm" in content
-    assert '"you"' in content
+    assert "warm, caring" in content
+    assert "witchy, gentle, and to the point" in content
+    assert "1-2 sentences" in content
+    # Like the one-card prompt, it closes with a single piece of guidance.
+    assert "close with one clear piece of guidance" in content
     # The old separate astrology section was folded into Symbolism.
     assert "elemental & astrological ties" not in content
 
@@ -522,5 +524,5 @@ def test_deep_card_prompt_is_concise_and_warm():
 def test_deep_card_for_you_now_covers_both_orientations():
     content = readings.load_prompt_template("deep_card_user.md").content
     line = next(l for l in content.splitlines() if l.startswith("**For You Now**"))
-    assert "3-5" in line
     assert "upright" in line and "reversed" in line
+    assert "For You Now to 3-5 sentences" in content
