@@ -515,6 +515,8 @@ def test_deep_card_prompt_is_concise_and_warm():
     assert "warm, caring" in content
     assert "witchy, gentle, and to the point" in content
     assert "1-2 sentences" in content
+    # Like the one-card prompt, it closes with a single piece of guidance.
+    assert "close with one clear piece of guidance" in content
     # The old separate astrology section was folded into Symbolism.
     assert "elemental & astrological ties" not in content
 

@@ -4,7 +4,7 @@ role: user
 temperature: 0.8
 ---
 
-Give a warm, caring, in-depth reading for the card drawn below. Name the card, then read it in four short sections, each with a bold heading:
+Give a warm, caring, in-depth reading for the card drawn below. Name the card, read it in four short sections, each with a bold heading, and close with one clear piece of guidance:
 
 **Symbolism**: its key imagery, woven with its element, number, and any planet or sign.
 **Upright**: what it means upright.
